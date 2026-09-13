@@ -1,22 +1,34 @@
 /**
- * 产品数据配置（官网唯一需要维护的产品清单）
+ * 产品清单（官网唯一需要维护的产品数据）
  *
- * 新增软件时只需在此追加一个对象：
- * - name/en/tag/accent/tags/desc/features/platforms/meta/icon/site/repo
- * 官网的轮播、统计数字、页脚产品链接、“查看全部”弹层都会自动更新，无需再改页面代码。
+ * 新增产品时只需在此追加一个对象，页面上的产品索引、统计数字与页脚链接都会自动同步。
+ *
+ * 字段说明
+ *   num       两位编号，用于版面索引
+ *   name      中文名
+ *   en        英文名（以大写小标签形式呈现）
+ *   tag       一句话分类（如「桌面效率」）
+ *   lead      一句话定位
+ *   desc      展开说明
+ *   features  功能要点
+ *   meta      规格键值对（平台 / 技术栈 / 开源协议等）
+ *   iconSvg   内联图标（可选，优先级高于 iconImg）
+ *   iconImg   图标图片路径（可选）
+ *   site      产品官网地址
+ *   repo      源码仓库地址（可选）
  */
 (function (global) {
     'use strict';
+
     global.PRODUCTS_DATA = [
         {
+            num: '01',
             name: '天枢便签',
             en: 'PolarisNote',
             tag: '桌面效率',
-            accent: 'polaris',
-            tags: ['Qt 6', '跨平台', 'AI 驱动'],
-            desc: '融合 AI 智能助手、看板管理与富文本编辑的桌面笔记工具，本地存储，Windows / Linux 全平台原生支持。',
-            features: ['21+ 核心功能', '看板 + AI 客服', '文件智能分析'],
-            platforms: ['Windows', 'Linux'],
+            lead: '把笔记、看板与 AI 助手放进同一个桌面应用。',
+            desc: '融合 AI 智能助手、看板式管理与富文本编辑的桌面笔记工具。类 Trello 的看板布局用来组织工作流，AI 负责生成便签、续写内容、分析文档与智能问答，数据全部保存在本机 SQLite。',
+            features: ['21+ 核心功能', '看板式任务管理', 'AI 生成与续写', '文档智能分析', '本地 SQLite 存储'],
             meta: [
                 { k: '平台', v: 'Windows / Linux' },
                 { k: '技术栈', v: 'Qt 6 · C++ · SQLite' },
@@ -28,14 +40,13 @@
             repo: 'https://github.com/yan-stone-computer/PolarisNote'
         },
         {
+            num: '02',
             name: '枢游记',
             en: 'ShuYouJi',
             tag: '鸿蒙原生',
-            accent: 'shuyouji',
-            tags: ['HarmonyOS', 'ArkTS', '图像修复'],
-            desc: '基于 HarmonyOS NEXT 原生开发的 AI 智能旅行助手。图像修复、文化知识、行程规划、花费管理，让每一次旅行都更值得铭记。',
-            features: ['AI 图像修复', '手机/平板双端', 'AI 文化知识'],
-            platforms: ['HarmonyOS'],
+            lead: '为 HarmonyOS NEXT 原生开发的 AI 旅行助手。',
+            desc: '图像修复、文化知识、行程规划与花费管理集成在同一个应用里。AI 客服采用意图识别加指令模式，用自然语言即可管理整趟旅行；手机与平板双端原生适配。',
+            features: ['AI 图像修复（去雾 / 超分 / 锐化 / 色彩增强）', 'AI 智能客服', '图文旅行日记', '花费管理', '手机 / 平板双端'],
             meta: [
                 { k: '平台', v: 'HarmonyOS NEXT' },
                 { k: '设备', v: '手机 / 平板' },
@@ -47,14 +58,13 @@
             repo: ''
         },
         {
+            num: '03',
             name: '陈汉升',
             en: 'ChenHanshen',
             tag: '角色对话',
-            accent: 'chenhansheng',
-            tags: ['Android', 'Kotlin', 'AI 对话'],
-            desc: '把《我真没想重生啊》里的陈汉升装进手机——原生安卓 AI 角色扮演 App。人格对话、发图识图、AI 生图、剧情知识库开箱即用。',
-            features: ['陈汉升人格对话', '发图识图', 'AI 生图', '1000+ 章剧情知识库', '会话记忆'],
-            platforms: ['Android'],
+            lead: '把《我真没想重生啊》里的陈汉升装进手机。',
+            desc: '原生安卓 AI 角色扮演应用。角色话术与性格设定基于原著构建，支持人格对话、发图识图、AI 生图与剧情知识库检索；密钥与聊天记录只存本机。',
+            features: ['人格对话', '发图识图', 'AI 生图', '1000+ 章剧情知识库', '会话记忆'],
             meta: [
                 { k: '平台', v: 'Android 8.0+' },
                 { k: '版本', v: 'v4.1.0 · 9 MB' },
