@@ -23,6 +23,60 @@
     global.PRODUCTS_DATA = [
         {
             num: '01',
+            name: '启核工作台',
+            en: 'NexcoreWork',
+            tag: '本地智能体工作台',
+            lead: '把模型、工具、知识、记忆与执行证据收进同一台电脑。',
+            desc: '本地优先的开源智能体工作台。每次任务围绕明确的工作区展开，模型调用、工具执行、文件变化与风险审批都进入可追溯轨迹；知识、项目记忆和工作流在本地持续积累，结果可以复核后再交付。',
+            features: ['本地工作区', '可审计工具调用', '模型自由路由', '知识库与项目记忆', '工作流与专家智能体'],
+            meta: [
+                { k: '平台', v: 'Windows 10 / 11 · x64' },
+                { k: '版本', v: 'v0.1.0-alpha.1' },
+                { k: '边界', v: '本地优先 · 数据存本机' }
+            ],
+            iconSvg: '',
+            iconImg: 'assets/nexcorework-icon.svg',
+            site: 'https://yan-stone-computer.github.io/nexcorework-site/',
+            repo: 'https://github.com/yan-stone-computer/nexcorework-site'
+        },
+        {
+            num: '02',
+            name: '启核图策',
+            en: 'NexcoreGraph',
+            tag: '家庭资源智能管家',
+            lead: '拍一张照片，把家里的物品变成可查询、可推理、可协作的资源库。',
+            desc: '面向家庭场景的本地优先资源管理产品。通过拍照识别完成入库，再用 GraphRAG 把物品、位置、期限、菜谱与采购关系连成个人资源图谱；写操作先预览、再确认，并支持 HarmonyOS、Web 与微信小程序协同。',
+            features: ['拍照识别入库', '可信 AI 问答', 'GraphRAG 资源图谱', '多端协同', '写操作确认与撤销'],
+            meta: [
+                { k: '平台', v: 'HarmonyOS / Web / 小程序' },
+                { k: '技术栈', v: 'ArkTS · GraphRAG' },
+                { k: '原则', v: '本地优先 · 先确认后写入' }
+            ],
+            iconSvg: '',
+            iconImg: 'assets/nexcoregraph-icon.png',
+            site: 'https://yan-stone-computer.github.io/NexcoreGraph-Official/',
+            repo: 'https://github.com/yan-stone-computer/NexcoreGraph-Official'
+        },
+        {
+            num: '03',
+            name: '鼓令',
+            en: 'Drum Tide',
+            tag: '节庆彩墨竞技',
+            lead: '在中国传统节庆舞台上，用彩墨夺灯、守住四时文化浓度。',
+            desc: '一款以端午、中秋、元宵和春节为舞台的 4v4 彩墨竞技游戏。玩家与三名墨灵队友协作，涂彩夺取节令灯台，跟随每 30 秒一次的鼓声转场，并在 180 秒内争夺更高的文化浓度。',
+            features: ['4v4 墨灵团队竞技', '四时节令地图', '涂彩与夺灯玩法', '12 主武器 / 15 副武器', '离线完整对局'],
+            meta: [
+                { k: '平台', v: 'Windows 10 / 11 · x64' },
+                { k: '版本', v: 'v1.0.3' },
+                { k: '对局', v: '4v4 · 180 秒' }
+            ],
+            iconSvg: '',
+            iconImg: 'assets/guling-icon.webp',
+            site: 'https://yan-stone-computer.github.io/guling-drum-tide/',
+            repo: 'https://github.com/yan-stone-computer/guling-drum-tide'
+        },
+        {
+            num: '04',
             name: '天枢便签',
             en: 'PolarisNote',
             tag: '桌面效率',
@@ -40,7 +94,7 @@
             repo: 'https://github.com/yan-stone-computer/PolarisNote'
         },
         {
-            num: '02',
+            num: '05',
             name: '枢游记',
             en: 'ShuYouJi',
             tag: '鸿蒙原生',
@@ -58,7 +112,7 @@
             repo: ''
         },
         {
-            num: '03',
+            num: '06',
             name: '陈汉升',
             en: 'ChenHanshen',
             tag: '角色对话',

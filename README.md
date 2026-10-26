@@ -36,9 +36,12 @@
 
 | 编号 | 产品 | 形态 | 官网 |
 |---|---|---|---|
-| 01 | 天枢便签 PolarisNote | 桌面（Qt 6 / C++） | https://yan-stone-computer.github.io/polarisnote-web/ |
-| 02 | 枢游记 ShuYouJi | 鸿蒙原生（ArkTS / ArkUI） | https://yan-stone-computer.github.io/ShuYouJi-Web/ |
-| 03 | 陈汉升 ChenHanshen | 安卓（Kotlin） | https://yan-stone-computer.github.io/awesome-chenhansheng-app/ |
+| 01 | 启核工作台 NexcoreWork | 本地智能体工作台 | https://yan-stone-computer.github.io/nexcorework-site/ |
+| 02 | 启核图策 NexcoreGraph | 家庭资源智能管家 | https://yan-stone-computer.github.io/NexcoreGraph-Official/ |
+| 03 | 鼓令 Drum Tide | 4v4 节庆彩墨竞技 | https://yan-stone-computer.github.io/guling-drum-tide/ |
+| 04 | 天枢便签 PolarisNote | 桌面（Qt 6 / C++） | https://yan-stone-computer.github.io/polarisnote-web/ |
+| 05 | 枢游记 ShuYouJi | 鸿蒙原生（ArkTS / ArkUI） | https://yan-stone-computer.github.io/ShuYouJi-Web/ |
+| 06 | 陈汉升 ChenHanshen | 安卓（Kotlin） | https://yan-stone-computer.github.io/awesome-chenhansheng-app/ |
 
 产品清单同样是数据驱动的：修改 `products-data.js` 即可，产品索引、统计数字与
 页脚产品链接会自动同步。产品图标默认取 `iconSvg`；留空则回退到 `iconImg`，
@@ -67,6 +70,9 @@
     ├── logo-mark.png        # 品牌标识（透明底，含破壳幼芽）— 报头 / 封面 / 页脚
     ├── logo-seed.png        # 方形图标（种子主体，适用于 App 图标等方形场景）
     ├── favicon.png
+    ├── nexcoregraph-icon.png # 启核图策产品图标
+    ├── guling-icon.webp      # 鼓令产品图标
+    ├── nexcorework-icon.svg  # 启核工作台产品图标
     ├── shuyouji-icon.png    # 枢游记产品图标
     ├── chenhansheng-cover.jpg  # 陈汉升产品图标
     ├── group-qr.jpg         # 交流群二维码（联系区）
