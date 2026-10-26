@@ -49,6 +49,48 @@ ARTICLES = [
         "category": "安全",
         "date": "2026-08-20T08:00:00",
     },
+    {
+        "id": "deepseek-builtin-vision",
+        "title": "DeepSeek 当主脑，内置视觉当眼睛：文本模型怎样真正看懂截图",
+        "author": "启核 Nexcore",
+        "category": "Agent",
+        "date": "2026-10-27T13:00:00",
+    },
+    {
+        "id": "completion-evidence",
+        "title": "Agent 说“完成了”不算完成：怎样把交付变成可验证的证据链",
+        "author": "启核 Nexcore",
+        "category": "Agent",
+        "date": "2026-10-27T12:00:00",
+    },
+    {
+        "id": "context-budget-for-long-tasks",
+        "title": "长任务为什么总断：NexcoreWork 的四区块上下文治理",
+        "author": "启核 Nexcore",
+        "category": "系统工程",
+        "date": "2026-10-27T11:00:00",
+    },
+    {
+        "id": "free-model-auto-routing",
+        "title": "免费模型 Auto 不是随机抽卡：一次请求怎样选模型",
+        "author": "启核 Nexcore",
+        "category": "大模型",
+        "date": "2026-10-27T10:00:00",
+    },
+    {
+        "id": "screenshot-layout-debug",
+        "title": "从一张用户截图修全局图片裁切：HTML height 属性和 CSS 的暗战",
+        "author": "启核 Nexcore",
+        "category": "前端",
+        "date": "2026-10-27T09:00:00",
+    },
+    {
+        "id": "workspace-and-memory",
+        "title": "为什么本地优先智能体需要工作区和项目记忆",
+        "author": "启核 Nexcore",
+        "category": "Agent",
+        "date": "2026-10-27T08:00:00",
+    },
 ]
 
 

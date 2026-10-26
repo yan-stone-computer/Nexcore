@@ -23,9 +23,9 @@ const ROOT = path.join(__dirname, '..');
 const read = (p) => fs.readFileSync(path.join(ROOT, p), 'utf8');
 
 const CASES = [
-    { mode: 'md404',      expect: 3, note: '预览环境：清单 200、正文 404（本次线上故障的现场）' },
-    { mode: 'md200',      expect: 3, note: '正常静态服务器：清单 200、正文 200' },
-    { mode: 'noManifest', expect: 3, note: '清单也拿不到（file:// 直接打开）' },
+    { mode: 'md404',      expect: 5, note: '预览环境：清单 200、正文 404，首屏仍渲染 5 篇' },
+    { mode: 'md200',      expect: 5, note: '正常静态服务器：清单 200、正文 200，首屏渲染 5 篇' },
+    { mode: 'noManifest', expect: 5, note: '清单也拿不到（file:// 直接打开），兜底首屏 5 篇' },
     { mode: 'legacy404',  expect: 0, legacy: true, note: '反向用例：退回修复前的窄降级逻辑' }
 ];
 
