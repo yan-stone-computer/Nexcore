@@ -36,7 +36,7 @@
 
 | 编号 | 产品 | 形态 | 官网 |
 |---|---|---|---|
-| 01 | 启核工作台 NexcoreWork | 本地智能体工作台 | https://yan-stone-computer.github.io/nexcorework-site/index.html |
+| 01 | 启核工作台 NexcoreWork | 本地智能体工作台 | https://yan-stone-computer.github.io/nexcorework-site/?v=20261027-2 |
 | 02 | 启核图策 NexcoreGraph | 家庭资源智能管家 | https://yan-stone-computer.github.io/NexcoreGraph-Official/ |
 | 03 | 鼓令 Drum Tide | 4v4 节庆彩墨竞技 | https://yan-stone-computer.github.io/guling-drum-tide/ |
 | 04 | 天枢便签 PolarisNote | 桌面（Qt 6 / C++） | https://yan-stone-computer.github.io/polarisnote-web/ |
