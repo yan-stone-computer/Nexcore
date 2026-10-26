@@ -36,7 +36,7 @@
             ],
             iconSvg: '',
             iconImg: 'assets/nexcorework-icon.svg',
-            site: 'https://yan-stone-computer.github.io/nexcorework-site/',
+            site: 'https://yan-stone-computer.github.io/nexcorework-site/index.html',
             repo: 'https://github.com/yan-stone-computer/nexcorework-site'
         },
         {
