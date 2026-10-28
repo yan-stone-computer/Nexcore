@@ -70,5 +70,29 @@
     "category": "Agent",
     "date": "2026-10-27T08:00:00",
     "file": "workspace-and-memory.md"
+  },
+  {
+    "id": "agent-execution-loop",
+    "title": "Agent 执行闭包：为什么一次生成无法完成真实工作",
+    "author": "启核 Nexcore",
+    "category": "Agent",
+    "date": "2026-10-28T11:00:00",
+    "file": "agent-execution-loop.md"
+  },
+  {
+    "id": "local-storage-architecture",
+    "title": "本地智能体怎样存数据：SQLite、工作区与可恢复状态",
+    "author": "启核 Nexcore",
+    "category": "系统工程",
+    "date": "2026-10-28T10:00:00",
+    "file": "local-storage-architecture.md"
+  },
+  {
+    "id": "tool-permission-boundary",
+    "title": "工具权限不是弹窗：Agent 工作区的真实安全边界",
+    "author": "启核 Nexcore",
+    "category": "安全",
+    "date": "2026-10-28T09:00:00",
+    "file": "tool-permission-boundary.md"
   }
 ]

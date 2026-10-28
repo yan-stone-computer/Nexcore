@@ -91,6 +91,27 @@ ARTICLES = [
         "category": "Agent",
         "date": "2026-10-27T08:00:00",
     },
+    {
+        "id": "agent-execution-loop",
+        "title": "Agent 执行闭包：为什么一次生成无法完成真实工作",
+        "author": "启核 Nexcore",
+        "category": "Agent",
+        "date": "2026-10-28T11:00:00",
+    },
+    {
+        "id": "local-storage-architecture",
+        "title": "本地智能体怎样存数据：SQLite、工作区与可恢复状态",
+        "author": "启核 Nexcore",
+        "category": "系统工程",
+        "date": "2026-10-28T10:00:00",
+    },
+    {
+        "id": "tool-permission-boundary",
+        "title": "工具权限不是弹窗：Agent 工作区的真实安全边界",
+        "author": "启核 Nexcore",
+        "category": "安全",
+        "date": "2026-10-28T09:00:00",
+    },
 ]
 
 
@@ -122,6 +143,7 @@ def main() -> None:
     manifest_path.write_text(
         json.dumps(manifest, ensure_ascii=False, indent=2) + "\n",
         encoding="utf-8",
+        newline="\n",
     )
     print(f"[ok] 已生成 {manifest_path.relative_to(ROOT)}（{len(manifest)} 篇）")
 
@@ -137,6 +159,7 @@ def main() -> None:
         + json.dumps(bundle, ensure_ascii=False, separators=(",", ":"))
         + ";\n",
         encoding="utf-8",
+        newline="\n",
     )
     size_kb = offline_path.stat().st_size / 1024
     print(f"[ok] 已生成 {offline_path.relative_to(ROOT)}（{size_kb:.0f} KB）")

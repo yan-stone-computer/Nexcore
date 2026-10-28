@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>启核 Nexcore — 下一代智能内核</title>
+<title>启核 Nexcore · 下一代智能内核</title>
 <meta name="description" content="启核 Nexcore，寓意 Next Core，代表下一代智能内核。团队专注大模型 Agent、RAG 检索增强、算法建模与软件系统开发，致力于将前沿 AI 技术转化为可验证、可交付的完整项目。">
 <meta name="theme-color" content="#f6f4ee">
 <link rel="icon" type="image/png" href="assets/favicon.png">
@@ -16,7 +16,7 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@300;400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
 </noscript>
 
-<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="styles.css?v=20261028-arch6">
 </head>
 <body>
 <div class="progress" id="scrollProgress" aria-hidden="true"></div>
@@ -25,7 +25,7 @@
 <header class="masthead" id="navbar">
   <div class="wrap masthead-in">
     <a class="brand" href="#top">
-      <img class="brand-mark" src="assets/logo-mark.png" alt="">
+      <img class="brand-mark" src="assets/logo-mark.png" width="464" height="625" alt="">
       <span class="brand-word">
         <b>启核</b>
         <i>NEXCORE</i>
@@ -37,6 +37,7 @@
       <a href="#directions" class="nav-link">方向</a>
       <a href="#products" class="nav-link">产品</a>
       <a href="#method" class="nav-link">方法</a>
+      <a href="#architecture" class="nav-link">架构</a>
       <a href="#articles" class="nav-link">文章</a>
       <a href="#contact" class="nav-link">联系</a>
     </nav>
@@ -63,7 +64,7 @@
 
     <div class="cover-grid">
       <div class="cover-head">
-        <p class="kicker">Next Core — 下一代智能内核</p>
+        <p class="kicker">Next Core / 下一代智能内核</p>
         <h1>
           <span>以严谨的数理思维</span>
           <span>构建智能系统</span>
@@ -75,7 +76,7 @@
       </div>
 
       <figure class="cover-mark">
-        <img src="assets/logo-mark.png" alt="启核 Nexcore 标识">
+        <img src="assets/logo-mark.png" width="464" height="625" alt="启核 Nexcore 标识">
         <figcaption>破壳 · 发芽 · 内核</figcaption>
       </figure>
     </div>
@@ -86,8 +87,9 @@
       <a href="#directions"><b>02</b>四条技术方向</a>
       <a href="#products"><b>03</b>产品矩阵</a>
       <a href="#method"><b>04</b>方法与技术栈</a>
-      <a href="#articles"><b>05</b>技术文章</a>
-      <a href="#contact"><b>06</b>联系与协作</a>
+      <a href="#architecture"><b>05</b>核心架构</a>
+      <a href="#articles"><b>06</b>技术文章</a>
+      <a href="#contact"><b>07</b>联系与协作</a>
     </nav>
   </div>
 </section>
@@ -250,7 +252,7 @@
               <span class="metric-label">技术组件</span>
             </div>
             <div class="metric">
-              <span class="metric-num" id="techMetricArticles" data-target="9">9</span>
+              <span class="metric-num" id="techMetricArticles" data-target="12">12</span>
               <span class="metric-label">技术文章</span>
             </div>
           </div>
@@ -260,11 +262,115 @@
   </div>
 </section>
 
-<!-- ═══════════ 05 文章 ═══════════ -->
-<section class="sect" id="articles">
+<!-- ═══════════ 05 核心架构 ═══════════ -->
+<section class="sect" id="architecture">
   <div class="wrap rail">
     <div class="rail-head">
       <span class="rail-num">05</span>
+      <span class="rail-en">Architecture</span>
+      <span class="rail-cn">核心架构</span>
+    </div>
+
+    <div class="rail-body">
+      <h2 class="sect-title reveal">把智能体拆开看</h2>
+      <p class="sect-note reveal">
+        六张图对应六个容易含糊的工程问题：执行如何闭环、记忆如何续接、数据存在哪里、
+        图片怎样变成证据、上下文怎样压缩、工具权限怎样守住。每张图都可以继续读对应的架构文章。
+      </p>
+
+      <div class="arch-explorer reveal">
+        <div class="arch-tabs" role="tablist" aria-label="核心架构图">
+          <button class="arch-tab is-active" id="archTabLoop" type="button" role="tab" aria-selected="true" aria-controls="archPanelLoop" data-arch="loop">
+            <span>01</span><div><b>执行闭环</b><small>Agent 如何继续工作</small></div>
+          </button>
+          <button class="arch-tab" id="archTabMemory" type="button" role="tab" aria-selected="false" aria-controls="archPanelMemory" data-arch="memory" tabindex="-1">
+            <span>02</span><div><b>项目记忆</b><small>跨轮次保持约束</small></div>
+          </button>
+          <button class="arch-tab" id="archTabStorage" type="button" role="tab" aria-selected="false" aria-controls="archPanelStorage" data-arch="storage" tabindex="-1">
+            <span>03</span><div><b>本地存储</b><small>设置与项目数据</small></div>
+          </button>
+          <button class="arch-tab" id="archTabVision" type="button" role="tab" aria-selected="false" aria-controls="archPanelVision" data-arch="vision" tabindex="-1">
+            <span>04</span><div><b>视觉证据链</b><small>图片到可读证据</small></div>
+          </button>
+          <button class="arch-tab" id="archTabContext" type="button" role="tab" aria-selected="false" aria-controls="archPanelContext" data-arch="context" tabindex="-1">
+            <span>05</span><div><b>上下文预算</b><small>长任务稳定续接</small></div>
+          </button>
+          <button class="arch-tab" id="archTabSecurity" type="button" role="tab" aria-selected="false" aria-controls="archPanelSecurity" data-arch="security" tabindex="-1">
+            <span>06</span><div><b>权限边界</b><small>工具不越界执行</small></div>
+          </button>
+        </div>
+
+        <div class="arch-panels">
+          <article class="arch-panel is-active" id="archPanelLoop" role="tabpanel" aria-labelledby="archTabLoop">
+            <figure><a href="assets/architecture/agent-loop.svg" target="_blank" rel="noreferrer" aria-label="查看执行闭环架构大图"><img src="assets/architecture/agent-loop.svg" width="960" height="540" alt="NexcoreWork Agent 执行闭环架构图"></a></figure>
+            <div class="arch-copy">
+              <span class="arch-figure-no">FIG. 01 / EXECUTION</span>
+              <h3>执行不是一次生成，而是可恢复的闭环</h3>
+              <p>规划器负责判断下一步，工具层负责执行，观察节点读取结果，证据与文件变化持续写回。交付门禁通过后才进入最终答复。</p>
+              <button class="arch-read" type="button" data-read-article="agent-execution-loop">阅读执行闭环文章 <span>→</span></button>
+            </div>
+          </article>
+
+          <article class="arch-panel" id="archPanelMemory" role="tabpanel" aria-labelledby="archTabMemory" hidden>
+            <figure><a href="assets/architecture/memory.svg" target="_blank" rel="noreferrer" aria-label="查看项目记忆架构大图"><img src="assets/architecture/memory.svg" width="960" height="540" alt="NexcoreWork 项目记忆架构图" loading="lazy"></a></figure>
+            <div class="arch-copy">
+              <span class="arch-figure-no">FIG. 02 / MEMORY</span>
+              <h3>先写记忆，再执行任务</h3>
+              <p>对话结论、工具事实与文件变化经过写入门控，保存到 .NexcoreWork；下一轮按项目、任务与时效重新召回。</p>
+              <button class="arch-read" type="button" data-read-article="workspace-and-memory">阅读项目记忆文章 <span>→</span></button>
+            </div>
+          </article>
+
+          <article class="arch-panel" id="archPanelStorage" role="tabpanel" aria-labelledby="archTabStorage" hidden>
+            <figure><a href="assets/architecture/storage.svg" target="_blank" rel="noreferrer" aria-label="查看本地存储架构大图"><img src="assets/architecture/storage.svg" width="960" height="540" alt="NexcoreWork 本地存储架构图" loading="lazy"></a></figure>
+            <div class="arch-copy">
+              <span class="arch-figure-no">FIG. 03 / STORAGE</span>
+              <h3>状态进 SQLite，项目留在工作区</h3>
+              <p>设置、会话、用量与加密密钥进入本地数据库；附件、产物与项目记忆留在用户选定的目录，重启后仍可恢复。</p>
+              <button class="arch-read" type="button" data-read-article="local-storage-architecture">阅读本地存储文章 <span>→</span></button>
+            </div>
+          </article>
+
+          <article class="arch-panel" id="archPanelVision" role="tabpanel" aria-labelledby="archTabVision" hidden>
+            <figure><a href="assets/architecture/vision.svg" target="_blank" rel="noreferrer" aria-label="查看视觉证据链架构大图"><img src="assets/architecture/vision.svg" width="960" height="540" alt="NexcoreWork 视觉证据链架构图" loading="lazy"></a></figure>
+            <div class="arch-copy">
+              <span class="arch-figure-no">FIG. 04 / VISION</span>
+              <h3>图片先变成证据，再交给主模型</h3>
+              <p>本地 OCR 与结构提取先行，视觉模型补充场景理解，融合后的文字、版面与对象证据再进入文本模型。</p>
+              <button class="arch-read" type="button" data-read-article="deepseek-builtin-vision">阅读视觉架构文章 <span>→</span></button>
+            </div>
+          </article>
+
+          <article class="arch-panel" id="archPanelContext" role="tabpanel" aria-labelledby="archTabContext" hidden>
+            <figure><a href="assets/architecture/context.svg" target="_blank" rel="noreferrer" aria-label="查看上下文预算架构大图"><img src="assets/architecture/context.svg" width="960" height="540" alt="NexcoreWork 上下文预算架构图" loading="lazy"></a></figure>
+            <div class="arch-copy">
+              <span class="arch-figure-no">FIG. 05 / CONTEXT</span>
+              <h3>压缩低价值历史，不删除原始记录</h3>
+              <p>系统规则、项目注入、对话历史与当前输入分开计量。超限时按优先级压缩，同时保留约束、证据和可回读原文。</p>
+              <button class="arch-read" type="button" data-read-article="context-budget-for-long-tasks">阅读上下文治理文章 <span>→</span></button>
+            </div>
+          </article>
+
+          <article class="arch-panel" id="archPanelSecurity" role="tabpanel" aria-labelledby="archTabSecurity" hidden>
+            <figure><a href="assets/architecture/security.svg" target="_blank" rel="noreferrer" aria-label="查看权限边界架构大图"><img src="assets/architecture/security.svg" width="960" height="540" alt="NexcoreWork 工具权限与工作区边界架构图" loading="lazy"></a></figure>
+            <div class="arch-copy">
+              <span class="arch-figure-no">FIG. 06 / SECURITY</span>
+              <h3>工具能做什么，由权限边界决定</h3>
+              <p>文件、命令、网络与密钥读取分别受控。高风险操作需要审批，所有调用即使失败也会留下可审计回执。</p>
+              <button class="arch-read" type="button" data-read-article="tool-permission-boundary">阅读权限边界文章 <span>→</span></button>
+            </div>
+          </article>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ 06 文章 ═══════════ -->
+<section class="sect" id="articles">
+  <div class="wrap rail">
+    <div class="rail-head">
+      <span class="rail-num">06</span>
       <span class="rail-en">Writing</span>
       <span class="rail-cn">技术文章</span>
     </div>
@@ -341,11 +447,11 @@
   </div>
 </section>
 
-<!-- ═══════════ 06 联系 ═══════════ -->
+<!-- ═══════════ 07 联系 ═══════════ -->
 <section class="sect sect-contact" id="contact">
   <div class="wrap rail">
     <div class="rail-head">
-      <span class="rail-num">06</span>
+      <span class="rail-num">07</span>
       <span class="rail-en">Contact</span>
       <span class="rail-cn">联系与协作</span>
     </div>
@@ -397,7 +503,7 @@
         </ul>
 
         <figure class="contact-qr reveal">
-          <img src="assets/group-qr.jpg" alt="启核 Nexcore 交流群二维码" loading="lazy" decoding="async">
+          <img src="assets/group-qr.jpg" width="1156" height="2055" alt="启核 Nexcore 交流群二维码" loading="lazy" decoding="async">
           <figcaption>
             <b>交流群</b>
             <span>QQ 群号 370626514</span>
@@ -415,7 +521,7 @@
   <div class="wrap">
     <div class="colophon-top">
       <div class="colophon-brand">
-        <img src="assets/logo-mark.png" alt="">
+        <img src="assets/logo-mark.png" width="464" height="625" alt="">
         <div>
           <b>启核 Nexcore</b>
           <p>下一代智能内核 · Next Core</p>
@@ -441,6 +547,7 @@
           <h5>本站</h5>
           <a href="#about">关于启核</a>
           <a href="#method">方法与技术栈</a>
+          <a href="#architecture">核心架构</a>
           <a href="#articles">技术文章</a>
         </div>
       </div>
@@ -487,10 +594,10 @@
 
 <script src="assets/vendor/marked.min.js"></script>
 <script src="assets/vendor/purify.min.js"></script>
-<script src="articles/offline.js"></script>
-<script src="directions-data.js"></script>
-<script src="products-data.js"></script>
-<script src="article-config.js"></script>
-<script src="script.js"></script>
+<script src="articles/offline.js?v=20261028-arch6"></script>
+<script src="directions-data.js?v=20261028-arch6"></script>
+<script src="products-data.js?v=20261028-arch6"></script>
+<script src="article-config.js?v=20261028-arch6"></script>
+<script src="script.js?v=20261028-arch6"></script>
 </body>
 </html>

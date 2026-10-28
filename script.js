@@ -376,6 +376,45 @@
         });
     }
 
+    const archTabs = Array.from(document.querySelectorAll('[data-arch]'));
+    const archPanels = Array.from(document.querySelectorAll('.arch-panel'));
+
+    function activateArchitecture(key, focus) {
+        const activeTab = archTabs.find(tab => tab.dataset.arch === key);
+        if (!activeTab) return;
+        archTabs.forEach(tab => {
+            const active = tab === activeTab;
+            tab.classList.toggle('is-active', active);
+            tab.setAttribute('aria-selected', active ? 'true' : 'false');
+            tab.tabIndex = active ? 0 : -1;
+        });
+        archPanels.forEach(panel => {
+            const active = panel.id === 'archPanel' + key.charAt(0).toUpperCase() + key.slice(1);
+            panel.hidden = !active;
+            panel.classList.remove('is-entering');
+            if (active) requestAnimationFrame(() => panel.classList.add('is-entering'));
+        });
+        if (focus) activeTab.focus();
+    }
+
+    archTabs.forEach((tab, index) => {
+        tab.addEventListener('click', () => activateArchitecture(tab.dataset.arch, false));
+        tab.addEventListener('keydown', (event) => {
+            if (!['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'Home', 'End'].includes(event.key)) return;
+            event.preventDefault();
+            let next = index;
+            if (event.key === 'ArrowLeft' || event.key === 'ArrowUp') next = (index - 1 + archTabs.length) % archTabs.length;
+            if (event.key === 'ArrowRight' || event.key === 'ArrowDown') next = (index + 1) % archTabs.length;
+            if (event.key === 'Home') next = 0;
+            if (event.key === 'End') next = archTabs.length - 1;
+            activateArchitecture(archTabs[next].dataset.arch, true);
+        });
+    });
+
+    document.querySelectorAll('[data-read-article]').forEach(button => {
+        button.addEventListener('click', () => openArticle('static-' + button.dataset.readArticle));
+    });
+
     const articleSearch = $('articleSearch');
     if (articleSearch) {
         articleSearch.addEventListener('input', () => {
