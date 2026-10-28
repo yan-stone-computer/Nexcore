@@ -10,6 +10,78 @@
 (function () {
     'use strict';
 
+    function canUsePaperShader() {
+        if (navigator.connection && navigator.connection.saveData) return false;
+        if ((navigator.deviceMemory || 8) <= 2) return false;
+        const probe = document.createElement('canvas');
+        const gl = probe.getContext('webgl2', { failIfMajorPerformanceCaveat: true });
+        gl?.getExtension('WEBGL_lose_context')?.loseContext();
+        return Boolean(gl);
+    }
+
+    async function mountPaperSurface() {
+        const host = document.getElementById('paperSurface');
+        const library = window.PaperShaders;
+        if (!host || !library || !canUsePaperShader()) return;
+        try {
+            const noiseTexture = library.getShaderNoiseTexture();
+            if (noiseTexture && !noiseTexture.complete) await noiseTexture.decode();
+            new library.ShaderMount(
+                host,
+                library.paperTextureFragmentShader,
+                {
+                    u_image: undefined,
+                    u_isImage: false,
+                    u_colorBack: library.getShaderColorFromString('#f6f4ee'),
+                    u_colorPaper: library.getShaderColorFromString('#f6f4ee'),
+                    u_colorShadow: library.getShaderColorFromString('#d9d3c6'),
+                    u_blending: 0,
+                    u_distortion: 0,
+                    u_clip: false,
+                    u_angle: 300,
+                    u_seed: 42,
+                    u_roughness: 0.16,
+                    u_roughnessSize: 0.35,
+                    u_roughnessRows: 0,
+                    u_fiber: 0.12,
+                    u_fiberSize: 0.6,
+                    u_folds: 0,
+                    u_foldSizeX: 1,
+                    u_foldSizeY: 1,
+                    u_foldOffsetX: 0,
+                    u_foldOffsetY: 0,
+                    u_wrinkles: 0,
+                    u_wrinkleSize: 0,
+                    u_crumples: 0,
+                    u_crumpleCount: 6,
+                    u_drops: 0,
+                    u_noiseTexture: noiseTexture,
+                    u_fit: library.ShaderFitOptions.cover,
+                    u_scale: 1,
+                    u_rotation: 0,
+                    u_offsetX: 0,
+                    u_offsetY: 0,
+                    u_originX: 0.5,
+                    u_originY: 0.5,
+                    u_worldWidth: 0,
+                    u_worldHeight: 0
+                },
+                { alpha: false, antialias: false, depth: false, stencil: false, powerPreference: 'low-power' },
+                0,
+                0,
+                1,
+                1400000
+            );
+            document.documentElement.dataset.paperShader = 'on';
+            delete document.documentElement.dataset.paperShaderError;
+        } catch (error) {
+            document.documentElement.dataset.paperShader = 'off';
+            document.documentElement.dataset.paperShaderError = String(error && error.message || error);
+        }
+    }
+
+    void mountPaperSurface();
+
     const $ = (id) => document.getElementById(id);
 
     /* ═══════════════════════════════════════════════════════════
