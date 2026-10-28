@@ -126,6 +126,7 @@
     const AUTHOR_FALLBACK = '启核 Nexcore';
 
     let staticArticles = [];
+    let staticArticlePromise = null;
     let searchKeyword = '';
     let currentPage = 1;
 
@@ -154,7 +155,9 @@
             .sort((a, b) => new Date(b.date || 0) - new Date(a.date || 0));
     }
 
-    async function loadStaticArticles() {
+    function loadStaticArticles() {
+        if (staticArticlePromise) return staticArticlePromise;
+        staticArticlePromise = (async () => {
         let loaded = [];
         try {
             const res = await fetch('articles/index.json', { cache: 'no-store' });
@@ -194,6 +197,9 @@
 
         renderArticles();
         setMetric($('techMetricArticles'), staticArticles.length);
+        return staticArticles;
+        })();
+        return staticArticlePromise;
     }
 
     // 从内联兜底包取单篇正文（file:// 下 fetch 被 CORS 拒绝，或静态服务器不返回 .md）
@@ -412,7 +418,11 @@
     });
 
     document.querySelectorAll('[data-read-article]').forEach(button => {
-        button.addEventListener('click', () => openArticle('static-' + button.dataset.readArticle));
+        button.addEventListener('click', async () => {
+            const id = 'static-' + button.dataset.readArticle;
+            if (!getAllArticles().some(article => article.id === id)) await loadStaticArticles();
+            openArticle(id);
+        });
     });
 
     const articleSearch = $('articleSearch');
