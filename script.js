@@ -829,7 +829,9 @@
        ═══════════════════════════════════════════════════════════ */
     renderDirections();
     renderProducts();
+    staticArticles = fromBundle();
     renderArticles();
+    setMetric($('techMetricArticles'), staticArticles.length);
     observeReveals();
     observeCounters();
     document.querySelectorAll('section[id], header[id]').forEach(s => {
