@@ -165,9 +165,9 @@
             const manifest = await res.json();
             if (!Array.isArray(manifest)) throw new Error('bad manifest');
 
-            for (const item of manifest) {
+            loaded = (await Promise.all(manifest.map(async (item) => {
                 const file = String(item.file || '').replace(/^\/+/, '');
-                if (!file) continue;
+                if (!file) return null;
 
                 let content = '';
                 try {
@@ -175,9 +175,9 @@
                     if (mdRes.ok) content = await mdRes.text();
                 } catch (e) { /* 单篇正文取不到不中断，下面用内联正文顶上 */ }
                 if (!content) content = bundleText(file);
-                if (!content) continue;
+                if (!content) return null;
 
-                loaded.push({
+                return {
                     id: 'static-' + (item.id || file),
                     title: item.title || file.replace(/\.md$/i, ''),
                     author: item.author || AUTHOR_FALLBACK,
@@ -185,8 +185,8 @@
                     date: item.date || new Date().toISOString(),
                     content,
                     static: true
-                });
-            }
+                };
+            }))).filter(Boolean);
         } catch (e) {
             loaded = [];   // 连清单都取不到 → 整体退回内联兜底包
         }
@@ -420,8 +420,22 @@
     document.querySelectorAll('[data-read-article]').forEach(button => {
         button.addEventListener('click', async () => {
             const id = 'static-' + button.dataset.readArticle;
-            if (!getAllArticles().some(article => article.id === id)) await loadStaticArticles();
-            openArticle(id);
+            if (getAllArticles().some(article => article.id === id)) {
+                openArticle(id);
+                return;
+            }
+            const label = button.innerHTML;
+            button.disabled = true;
+            button.setAttribute('aria-busy', 'true');
+            button.textContent = '正在载入文章...';
+            try {
+                await loadStaticArticles();
+                openArticle(id);
+            } finally {
+                button.disabled = false;
+                button.removeAttribute('aria-busy');
+                button.innerHTML = label;
+            }
         });
     });
 

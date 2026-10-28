@@ -32,9 +32,9 @@ const CASES = [
 /* 把 script.js 还原成修复前的写法，用来验证测试本身有效 */
 function toLegacy(code) {
     const out = code
-        .replace('if (!content) content = bundleText(file);', 'if (!content) continue;')
+        .replace('if (!content) content = bundleText(file);', 'if (!content) return null;')
         .replace('staticArticles = loaded.length ? loaded : fromBundle();', 'staticArticles = loaded;');
-    const ok = out.includes('if (!content) continue;') && out.includes('staticArticles = loaded;');
+    const ok = out.includes('if (!content) return null;') && out.includes('staticArticles = loaded;');
     return ok ? out : null;
 }
 
