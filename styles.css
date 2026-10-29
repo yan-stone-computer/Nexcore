@@ -2106,27 +2106,32 @@ svg {
   font-size: 16px;
 }
 
-.contact-qr {
-  margin: 0;
-}
-
-.contact-qr img {
-  width: 100%;
-  border-radius: 18px;
-  background: white;
-}
-
-.contact-qr figcaption {
+.contact-group {
   display: grid;
-  gap: 4px;
-  margin-top: 12px;
+  align-content: end;
+  gap: 8px;
+  margin: 0;
+  text-align: right;
+}
+
+.contact-group span,
+.contact-group small {
   color: rgba(245, 245, 247, 0.68);
   font-size: 11px;
 }
 
-.contact-qr b {
+.contact-group span {
+  font-weight: 620;
+  letter-spacing: 0.04em;
+}
+
+.contact-group strong {
   color: var(--contrast-ink);
-  font-size: 12px;
+  font-size: clamp(28px, 3vw, 42px);
+  font-variant-numeric: tabular-nums;
+  font-weight: 620;
+  letter-spacing: -0.035em;
+  line-height: 1;
 }
 
 .colophon {
@@ -2888,8 +2893,8 @@ svg {
     margin-top: 48px;
   }
 
-  .contact-qr {
-    width: min(100%, 220px);
+  .contact-group {
+    text-align: left;
   }
 
   .contact-links a {
