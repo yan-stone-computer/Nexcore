@@ -4,7 +4,7 @@
  * 结构
  *   1. 技术方向渲染（directions-data.js 驱动）
  *   2. 产品矩阵渲染（products-data.js 驱动）
- *   3. 技术文章系统（内置 Markdown + 本地投稿，PBKDF2 校验码）
+ *   3. 技术文章系统（内置 Markdown、书架预览与架构图）
  *   4. 版面交互（报头、滚动进度、进场动效、数字计数）
  */
 (function () {
@@ -193,9 +193,21 @@
     /* ═══════════════════════════════════════════════════════════
        3. 技术文章
        ═══════════════════════════════════════════════════════════ */
-    const STORAGE_KEY = 'nexcore_articles_v1';
-    const PER_PAGE = 5;
     const AUTHOR_FALLBACK = '启核 Nexcore';
+    const ARTICLE_DIAGRAMS = {
+        'llm-app-dev-guide': { src: 'assets/architecture/agent-loop.svg', label: '从意图识别、检索增强到工具执行的应用架构' },
+        'skill-authoring-guide': { src: 'assets/architecture/agent-loop.svg', label: '技能从输入、工具调用到结果验证的执行闭环' },
+        'slow-hash-guide': { src: 'assets/architecture/security.svg', label: '凭据校验、加密存储与权限边界' },
+        'deepseek-builtin-vision': { src: 'assets/architecture/vision.svg', label: '视觉证据链：解析、融合与可读输出' },
+        'completion-evidence': { src: 'assets/architecture/agent-loop.svg', label: '执行、观察、证据写回与交付门禁' },
+        'context-budget-for-long-tasks': { src: 'assets/architecture/context.svg', label: '固定规则、项目注入、历史与输入四区预算' },
+        'free-model-auto-routing': { src: 'assets/architecture/agent-loop.svg', label: '任务特征、模型路由、执行与结果回写' },
+        'screenshot-layout-debug': { src: 'assets/architecture/vision.svg', label: '截图从视觉解析到布局证据的处理链' },
+        'workspace-and-memory': { src: 'assets/architecture/memory.svg', label: '工作区、项目记忆与跨轮次召回' },
+        'agent-execution-loop': { src: 'assets/architecture/agent-loop.svg', label: 'Agent 规划、执行、观察与交付闭环' },
+        'local-storage-architecture': { src: 'assets/architecture/storage.svg', label: '应用数据库、工作区与本地文件边界' },
+        'tool-permission-boundary': { src: 'assets/architecture/security.svg', label: '工具权限、审批与执行回执' }
+    };
     const BOOK_PALETTE = [
         { bg: '#0b5d45', ink: '#f4fffa', edge: '#7fcbb1' },
         { bg: '#234b6b', ink: '#f2f8ff', edge: '#8db9de' },
@@ -208,32 +220,9 @@
     let staticArticles = [];
     let staticArticlePromise = null;
     let searchKeyword = '';
-    let currentPage = 1;
 
     const articleList = $('articleList');
     const articleCount = $('articleCount');
-    const articlePagination = $('articlePagination');
-
-    function loadLocal() {
-        try {
-            const raw = localStorage.getItem(STORAGE_KEY);
-            const list = raw ? JSON.parse(raw) : [];
-            return Array.isArray(list) ? list : [];
-        } catch (e) {
-            return [];
-        }
-    }
-
-    function saveLocal(list) {
-        try {
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(list));
-        } catch (e) { /* 隐私模式下静默忽略 */ }
-    }
-
-    function getAllArticles() {
-        return staticArticles.concat(loadLocal())
-            .sort((a, b) => new Date(b.date || 0) - new Date(a.date || 0));
-    }
 
     function loadStaticArticles() {
         if (staticArticlePromise) return staticArticlePromise;
@@ -349,6 +338,14 @@
         return esc(raw).replace(/\n/g, '<br>');
     }
 
+    function spineTitleMarkup(title) {
+        const chars = Array.from(String(title || '未命名文章'));
+        const visible = chars.length > 24 ? chars.slice(0, 24).join('') + '…' : chars.join('');
+        if (visible.length <= 12) return `<span>${esc(visible)}</span>`;
+        const split = Math.ceil(visible.length / 2);
+        return `<span>${esc(visible.slice(0, split))}</span><span>${esc(visible.slice(split))}</span>`;
+    }
+
     // 渲染后的正文再加工：去掉与弹窗标题重复的首个 H1、表格加滚动容器、外链新窗口打开
     function polishBody(container) {
         if (!container) return;
@@ -368,7 +365,7 @@
 
     function getFiltered() {
         const kw = searchKeyword.trim().toLowerCase();
-        const list = getAllArticles();
+        const list = staticArticles;
         if (!kw) return list;
         return list.filter(a =>
             (a.title || '').toLowerCase().includes(kw) ||
@@ -383,64 +380,42 @@
 
         const filtered = getFiltered();
         const total = filtered.length;
-        const totalPages = Math.max(1, Math.ceil(total / PER_PAGE));
-        if (currentPage > totalPages) currentPage = totalPages;
-
-        const pageItems = filtered.slice((currentPage - 1) * PER_PAGE, currentPage * PER_PAGE);
         if (articleCount) articleCount.textContent = total ? `${total} 篇` : '';
 
-        if (!pageItems.length) {
+        if (!filtered.length) {
             const kw = searchKeyword.trim();
             articleList.innerHTML = `
                 <div class="art-empty">
                     <h4>${kw ? '没有匹配的文章' : '暂无文章'}</h4>
                     <p>${kw
                         ? `没有与「${esc(kw)}」相关的内容，换个关键词试试。`
-                        : '在右侧表单填写标题与正文即可发布第一篇；也可以直接载入 .md 文件。'}</p>
+                        : '文章暂时没有加载成功，请刷新页面后重试。'}</p>
                 </div>`;
-            renderPager(totalPages);
             return;
         }
 
-        articleList.innerHTML = pageItems.map((a, index) => {
-            const book = BOOK_PALETTE[(a.category ? a.category.charCodeAt(0) + index : index) % BOOK_PALETTE.length];
-            const date = formatDate(a.date);
-            const spineTitle = Array.from(a.title || '未命名文章');
-            const shortTitle = spineTitle.length > 18 ? spineTitle.slice(0, 18).join('') + '…' : spineTitle.join('');
-            return `
-                <article class="article book-slot" data-id="${esc(a.id)}" style="--book-bg:${book.bg};--book-ink:${book.ink};--book-edge:${book.edge};--book-h:${[88, 74, 94, 80, 86][index % 5]}%;--book-i:${index}">
-                    <button class="book-spine" type="button" data-act="select" aria-label="选择文章：${esc(a.title)}" title="${esc(a.title)}">
-                        <span class="book-spine-category">${esc(a.category || '其他')}</span>
-                        <span class="book-spine-title">${esc(shortTitle)}</span>
-                        <span class="book-spine-year">${esc(date.slice(0, 4))}</span>
-                    </button>
-                    <span class="book-bookmark" aria-hidden="true"></span>
-                </article>`;
-        }).join('');
-
-        renderPager(totalPages);
-    }
-
-    function renderPager(totalPages) {
-        if (!articlePagination) return;
-        if (totalPages <= 1) { articlePagination.innerHTML = ''; return; }
-
-        const btn = (label, page, disabled, active) =>
-            `<button type="button" class="ap-btn${active ? ' active' : ''}" data-page="${page}"${disabled ? ' disabled' : ''}>${label}</button>`;
-
-        let html = btn('上一页', currentPage - 1, currentPage === 1, false);
-        const marks = [];
-        for (let i = 1; i <= totalPages; i++) {
-            if (i === 1 || i === totalPages || Math.abs(i - currentPage) <= 1) marks.push(i);
-            else if (marks[marks.length - 1] !== '…') marks.push('…');
+        const perShelf = innerWidth <= 760 ? 3 : innerWidth <= 1180 ? 4 : 6;
+        let bookIndex = 0;
+        const rows = [];
+        for (let start = 0; start < filtered.length; start += perShelf) {
+            const shelf = filtered.slice(start, start + perShelf);
+            const books = shelf.map((a) => {
+                const index = bookIndex++;
+                const book = BOOK_PALETTE[(a.category ? a.category.charCodeAt(0) + index : index) % BOOK_PALETTE.length];
+                const date = formatDate(a.date);
+                return `
+                    <article class="article book-slot" data-id="${esc(a.id)}" style="--book-bg:${book.bg};--book-ink:${book.ink};--book-edge:${book.edge};--book-h:${[88, 74, 94, 80, 86][index % 5]}%;--book-i:${index}">
+                        <button class="book-spine" type="button" data-act="select" aria-label="选择文章：${esc(a.title)}" title="${esc(a.title)}">
+                            <span class="book-spine-category">${esc(a.category || '其他')}</span>
+                            <span class="book-spine-title">${spineTitleMarkup(a.title)}</span>
+                            <span class="book-spine-year">${esc(date.slice(0, 4))}</span>
+                        </button>
+                        <span class="book-bookmark" aria-hidden="true"></span>
+                    </article>`;
+            }).join('');
+            rows.push(`<div class="bookshelf-row"><div class="bookshelf-books" style="--cols:${shelf.length}">${books}</div><span class="shelf-board" aria-hidden="true"></span></div>`);
         }
-        marks.forEach(p => {
-            html += p === '…'
-                ? '<span class="ap-ellipsis">…</span>'
-                : btn(String(p), p, false, p === currentPage);
-        });
-        html += btn('下一页', currentPage + 1, currentPage === totalPages, false);
-        articlePagination.innerHTML = html;
+        articleList.innerHTML = rows.join('');
     }
 
     // 列表交互
@@ -454,8 +429,6 @@
             const act = btn.dataset.act;
             if (act === 'select') openBookPreview(id, btn);
             else if (act === 'read') openArticle(id);
-            else if (act === 'edit') startEdit(id);
-            else if (act === 'del') openDelete(id);
         });
     }
 
@@ -497,7 +470,7 @@
     document.querySelectorAll('[data-read-article]').forEach(button => {
         button.addEventListener('click', async () => {
             const id = 'static-' + button.dataset.readArticle;
-            if (getAllArticles().some(article => article.id === id)) {
+            if (staticArticles.some(article => article.id === id)) {
                 openArticle(id);
                 return;
             }
@@ -520,21 +493,15 @@
     if (articleSearch) {
         articleSearch.addEventListener('input', () => {
             searchKeyword = articleSearch.value;
-            currentPage = 1;
             renderArticles();
         });
     }
 
-    if (articlePagination) {
-        articlePagination.addEventListener('click', (e) => {
-            const btn = e.target.closest('.ap-btn');
-            if (!btn || btn.disabled) return;
-            currentPage = parseInt(btn.dataset.page, 10) || 1;
-            renderArticles();
-            const top = document.querySelector('.art-toolbar');
-            if (top) top.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        });
-    }
+    let shelfResizeTimer = 0;
+    window.addEventListener('resize', () => {
+        clearTimeout(shelfResizeTimer);
+        shelfResizeTimer = setTimeout(renderArticles, 140);
+    }, { passive: true });
 
     // ── 阅读弹窗 ──
     const articleModal = $('articleModal');
@@ -543,6 +510,9 @@
     const amCat = $('amCat');
     const amDate = $('amDate');
     const amBody = $('amBody');
+    const amDiagram = $('amDiagram');
+    const amDiagramImage = amDiagram?.querySelector('img');
+    const amDiagramCaption = amDiagram?.querySelector('figcaption');
     const bookOverlay = $('bookOverlay');
     const bookCoverObject = $('bookCoverObject');
     const bookPreviewCategory = $('bookPreviewCategory');
@@ -552,13 +522,12 @@
     const bookPreviewYear = $('bookPreviewYear');
     const bookPreviewHeading = $('bookPreviewHeading');
     const bookPreviewExcerpt = $('bookPreviewExcerpt');
-    const bookOwnerActions = $('bookOwnerActions');
     const bookRead = $('bookRead');
     let previewBookId = null;
     let previewBookTrigger = null;
 
     function openBookPreview(id, trigger) {
-        const article = getAllArticles().find(item => item.id === id);
+        const article = staticArticles.find(item => item.id === id);
         if (!bookOverlay || !article) return;
         previewBookId = id;
         previewBookTrigger = trigger || null;
@@ -574,7 +543,6 @@
         bookPreviewYear.textContent = formatDate(article.date).slice(0, 4);
         bookPreviewHeading.textContent = '内容简介';
         bookPreviewExcerpt.textContent = makeExcerpt(article.content, 220);
-        bookOwnerActions.hidden = Boolean(article.static);
         book?.classList.add('is-pulled');
         bookOverlay.hidden = false;
         document.body.style.overflow = 'hidden';
@@ -590,7 +558,7 @@
         const trigger = previewBookTrigger;
         setTimeout(() => {
             bookOverlay.hidden = true;
-            if ((!articleModal || articleModal.hidden) && (!codeModal || codeModal.hidden)) {
+            if (!articleModal || articleModal.hidden) {
                 document.body.style.overflow = '';
             }
             trigger?.closest('.article')?.classList.remove('is-pulled');
@@ -601,12 +569,21 @@
     }
 
     function openArticle(id) {
-        const a = getAllArticles().find(x => x.id === id);
+        const a = staticArticles.find(x => x.id === id);
         if (!articleModal || !a) return;
         amTitle.textContent = a.title;
         amAuthor.textContent = a.author;
         amCat.textContent = a.category || '其他';
         amDate.textContent = formatDate(a.date) + (a.updatedAt ? ' · 已编辑' : '');
+        const articleKey = String(a.id || '').replace(/^static-/, '').replace(/\.md$/i, '');
+        const hasInlineDiagram = /assets\/architecture\//.test(String(a.content || ''));
+        const diagram = hasInlineDiagram ? null : ARTICLE_DIAGRAMS[articleKey];
+        if (amDiagram && amDiagramImage && amDiagramCaption) {
+            amDiagram.hidden = !diagram;
+            amDiagramImage.src = diagram ? diagram.src : '';
+            amDiagramImage.alt = diagram ? diagram.label : '';
+            amDiagramCaption.textContent = diagram ? diagram.label : '';
+        }
         amBody.innerHTML = renderMarkdown(a.content);
         polishBody(amBody);
         articleModal.hidden = false;
@@ -636,46 +613,10 @@
         });
     }
 
-    if ($('bookEdit')) {
-        $('bookEdit').addEventListener('click', () => {
-            const id = previewBookId;
-            closeBookPreview(false);
-            if (id) setTimeout(() => startEdit(id), 190);
-        });
-    }
-
-    if ($('bookDelete')) {
-        $('bookDelete').addEventListener('click', () => {
-            const id = previewBookId;
-            closeBookPreview(false);
-            if (id) setTimeout(() => openDelete(id), 190);
-        });
-    }
-
     if (articleModal) {
         articleModal.addEventListener('click', (e) => {
             if (e.target.closest('[data-close]')) closeArticle();
         });
-    }
-
-    // ── 校验码：PBKDF2 迭代慢哈希（加盐），与 article-config.js 对应 ──
-    async function verifyCode(input) {
-        const cfg = window.ARTICLE_CONFIG;
-        if (!cfg || !window.crypto || !window.crypto.subtle) return false;
-        try {
-            const salt = Uint8Array.from(atob(cfg.salt), c => c.charCodeAt(0));
-            const material = await crypto.subtle.importKey(
-                'raw', new TextEncoder().encode(input), 'PBKDF2', false, ['deriveBits']
-            );
-            const bits = await crypto.subtle.deriveBits(
-                { name: 'PBKDF2', salt, iterations: cfg.iterations, hash: cfg.algorithm },
-                material, 256
-            );
-            const derived = btoa(String.fromCharCode(...new Uint8Array(bits)));
-            return derived === cfg.hash;
-        } catch (e) {
-            return false;
-        }
     }
 
     // ── 投稿表单 ──

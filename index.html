@@ -258,69 +258,18 @@
       <h2 class="sect-title reveal">把踩过的坑写下来</h2>
       <p class="sect-note reveal">
         收录团队在 Agent、检索、建模与工程实现中沉淀的技术笔记。点击书脊抽出一本书，
-        可以先看封面与简介，再决定阅读、投稿或放回书架。
+        可以先看封面与简介，再决定阅读或放回书架。
       </p>
 
-      <div class="art-layout">
-        <div class="art-col">
-          <div class="art-toolbar">
-            <label class="art-search">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-              <input type="search" id="articleSearch" placeholder="在书架中搜索标题、作者、分类或正文" aria-label="搜索文章">
-            </label>
-            <span class="art-count" id="articleCount"></span>
-          </div>
-
-          <div class="art-list" id="articleList"></div>
-          <div class="art-pager" id="articlePagination"></div>
+      <div class="library">
+        <div class="art-toolbar">
+          <label class="art-search">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            <input type="search" id="articleSearch" placeholder="在书架中搜索标题、作者、分类或正文" aria-label="搜索文章">
+          </label>
+          <span class="art-count" id="articleCount"></span>
         </div>
-
-        <aside class="art-aside">
-          <form class="au" id="articleForm" novalidate>
-            <div class="au-head">
-              <h3>投稿</h3>
-              <p>填写标题、作者与正文，输入校验码后发布。支持 Markdown。</p>
-            </div>
-
-            <div class="au-field">
-              <label for="artTitle">标题</label>
-              <input id="artTitle" name="title" type="text" maxlength="60" placeholder="文章标题" required>
-            </div>
-
-            <div class="au-row">
-              <div class="au-field">
-                <label for="artAuthor">作者</label>
-                <input id="artAuthor" name="author" type="text" maxlength="20" placeholder="昵称或姓名" required>
-              </div>
-              <div class="au-field">
-                <label for="artCategory">分类</label>
-                <select id="artCategory" name="category"></select>
-              </div>
-            </div>
-
-            <div class="au-field">
-              <label for="artContent">正文</label>
-              <textarea id="artContent" name="content" rows="9" maxlength="50000" placeholder="支持 Markdown：标题、代码块、表格、引用、图片链接…" required></textarea>
-            </div>
-
-            <div class="au-field">
-              <label for="artMd">载入 Markdown 文件</label>
-              <div class="au-file">
-                <label class="au-file-btn" for="artMd">选择 .md</label>
-                <span class="au-file-name" id="artMdName">未选择文件</span>
-              </div>
-              <input type="file" id="artMd" accept=".md,.markdown,text/markdown,text/plain" hidden>
-            </div>
-
-            <div class="au-field">
-              <label for="artCode">校验码</label>
-              <input id="artCode" name="code" type="password" autocomplete="off" placeholder="用于发布与删除" required>
-            </div>
-
-            <p class="au-msg" id="artMsg" role="status"></p>
-            <button type="submit" class="btn btn-primary" id="artSubmit">发布文章</button>
-          </form>
-        </aside>
+        <div class="art-list" id="articleList"></div>
       </div>
     </div>
   </div>
@@ -437,6 +386,10 @@
       </div>
       <h2 class="ma-title" id="amTitle"></h2>
       <p class="ma-author" id="amAuthor"></p>
+      <figure class="ma-diagram" id="amDiagram" hidden>
+        <img width="960" height="540" alt="">
+        <figcaption></figcaption>
+      </figure>
       <div class="md" id="amBody"></div>
     </div>
   </div>
@@ -463,34 +416,14 @@
         <button type="button" class="btn btn-primary" id="bookRead">开始阅读</button>
         <button type="button" class="btn btn-ghost" data-book-close>放回书架</button>
       </div>
-      <div class="book-owner-actions" id="bookOwnerActions" hidden>
-        <button type="button" class="tbtn is-muted" id="bookEdit">编辑</button>
-        <button type="button" class="tbtn is-danger" id="bookDelete">删除</button>
-      </div>
     </div>
   </section>
-</div>
-
-<!-- 删除确认 -->
-<div class="modal" id="codeModal" hidden>
-  <div class="modal-veil" data-close></div>
-  <div class="modal-panel modal-slim" role="dialog" aria-modal="true" aria-label="确认删除">
-    <h3>确认删除</h3>
-    <p class="modal-note">删除后不可恢复。请输入校验码以继续。</p>
-    <input type="password" id="codeModalInput" autocomplete="off" placeholder="校验码">
-    <p class="modal-msg" id="codeModalMsg"></p>
-    <div class="modal-actions">
-      <button type="button" class="btn btn-ghost" data-close>取消</button>
-      <button type="button" class="btn btn-danger" id="codeModalOk">删除</button>
-    </div>
-  </div>
 </div>
 
 <script src="assets/vendor/marked.min.js"></script>
 <script src="assets/vendor/purify.min.js"></script>
 <script src="articles/offline.js?v=20261028-arch9"></script>
 <script src="products-data.js?v=20261030-1"></script>
-<script src="article-config.js?v=20261028-arch9"></script>
 <script src="experience.js?v=20261030-1"></script>
 <script src="script.js?v=20261030-1"></script>
 </body>

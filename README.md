@@ -54,7 +54,6 @@
 ├── experience.js            # 首屏产品卡片、拖动、翻转、滚动形变与主题切换
 ├── script.js                # 交互：产品渲染、文章系统、版面动效
 ├── products-data.js         # 产品数据（唯一需要维护的产品清单）
-├── article-config.js        # 投稿校验码（PBKDF2 慢哈希参数）与文章分类
 ├── articles/
 │   ├── index.json           # 内置文章清单（http 环境由前端 fetch）
 │   ├── offline.js           # 同上内容的内联副本（file:// 直接打开时兜底，自动生成）
@@ -96,7 +95,7 @@ node scripts/test_article_loader.js
 以及一个**反向用例**（把代码退回修复前的写法，必须能复现出「0 篇 + 空状态」）。
 反向用例是为了防止测试本身失效——如果哪天它不再复现旧 bug，就说明这条测试已经失去意义了。
 
-如需更接近线上的环境（`localStorage`、`crypto.subtle` 行为一致），任选其一：
+如需更接近线上的环境，任选其一：
 
 ```bash
 # Python
@@ -113,24 +112,6 @@ npx serve .
 > 新增或修改文章后，运行 `python scripts/build_articles.py` 重新生成
 > `articles/index.json` 与 `articles/offline.js`，两份清单需要保持同步。
 
-## 技术文章投稿
-
-页面内置投稿表单，任何人都可以发布文章，发布与删除都需要校验码。
-
-- 校验码采用 **PBKDF2-HMAC-SHA256 慢哈希 + 随机盐**（310,000 次迭代）存储，
-  配置见 `article-config.js`，明文不落盘。
-- 投稿文章保存在浏览器的 `localStorage`；若需要全站共享，请接入后端存储，
-  并把校验逻辑迁移到服务端执行（前端校验只能防误操作，不能防篡改）。
-- 更换校验码：
-
-```bash
-node -e "const c=require('crypto');const p='你的新校验码';const s=c.randomBytes(16);\
-console.log('SALT='+s.toString('base64'));\
-console.log('HASH='+c.pbkdf2Sync(p,s,310000,32,'sha256').toString('base64'))"
-```
-
-把输出的 `SALT` 与 `HASH` 填回 `article-config.js` 即可。
-
 ## 设计说明
 
 版面采用 Apple Design Language 的产品画廊方向：
@@ -138,7 +119,7 @@ console.log('HASH='+c.pbkdf2Sync(p,s,310000,32,'sha256').toString('base64'))"
 1. **首屏聚焦** —— 左侧标题，右侧五张产品卡片以弧形叠放，保留充足留白。
 2. **连续形变** —— 滚动进度驱动同一组卡片展开为阶梯错位排列。
 3. **卡片交互** —— 可以拖动、翻转、悬停倾斜，也可用侧边按钮和键盘轮换。
-4. **文章书架** —— 标题写在可抽取的书脊上，取书后显示完整标题、简介与阅读入口。
+4. **文章书架** —— 全部文章放进整面多层书柜，长标题可排两列；取书后显示完整标题、简介与架构图。
 5. **双主题** —— 顶栏按钮以圆形转场切换明暗主题，选择保存在本地。
 6. **克制动效** —— 位移和透明度优先，并完整遵循 `prefers-reduced-motion`。
 
