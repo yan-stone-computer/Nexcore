@@ -2,24 +2,25 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>启核 Nexcore · 下一代智能内核</title>
 <meta name="description" content="启核 Nexcore，寓意 Next Core，代表下一代智能内核。团队专注大模型 Agent、RAG 检索增强、算法建模与软件系统开发，致力于将前沿 AI 技术转化为可验证、可交付的完整项目。">
-<meta name="theme-color" content="#f6f4ee">
+<meta name="theme-color" content="#f5f5f7">
 <link rel="icon" type="image/png" href="assets/favicon.png">
-
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" media="print" onload="this.media='all'"
-      href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@300;400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
-<noscript>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@300;400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
-</noscript>
-
-<link rel="stylesheet" href="styles.css?v=20261028-paper1">
+<script>
+(() => {
+  let saved = null;
+  try { saved = localStorage.getItem("nexcore-theme"); } catch {}
+  const theme = saved || (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+  document.documentElement.dataset.theme = theme;
+  document.documentElement.style.colorScheme = theme;
+  document.querySelector('meta[name="theme-color"]').content = theme === "dark" ? "#101012" : "#f5f5f7";
+})();
+</script>
+<link rel="stylesheet" href="styles.css?v=chromatic-1">
 </head>
 <body>
-<div class="paper-surface" id="paperSurface" aria-hidden="true"></div>
+<a class="skip-link" href="#products">跳到产品</a>
 <div class="progress" id="scrollProgress" aria-hidden="true"></div>
 
 <!-- ═══════════ 报头 ═══════════ -->
@@ -45,6 +46,15 @@
 
     <div class="masthead-end">
       <a class="masthead-cta" href="#contact">与我们协作</a>
+      <button class="theme-toggle" id="themeToggle" type="button" aria-label="切换到深色模式" aria-pressed="false">
+        <svg class="icon-sun" viewBox="0 0 24 24" aria-hidden="true">
+          <circle cx="12" cy="12" r="3.5"></circle>
+          <path d="M12 2.5v2M12 19.5v2M2.5 12h2M19.5 12h2M5.3 5.3l1.4 1.4M17.3 17.3l1.4 1.4M18.7 5.3l-1.4 1.4M6.7 17.3l-1.4 1.4"></path>
+        </svg>
+        <svg class="icon-moon" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M20 14.4A8.5 8.5 0 0 1 9.6 4a8.5 8.5 0 1 0 10.4 10.4Z"></path>
+        </svg>
+      </button>
       <button class="nav-toggle" id="navMobileBtn" aria-label="展开导航" aria-expanded="false">
         <span></span><span></span>
       </button>
@@ -56,42 +66,44 @@
 
 <!-- ═══════════ 封面 ═══════════ -->
 <section class="cover" id="cover">
-  <div class="wrap">
-    <div class="cover-meta">
-      <span>启核 · NEXCORE</span>
-      <span>软件工程 / 智能系统</span>
-      <span>第 01 期</span>
-    </div>
-
-    <div class="cover-grid">
+  <div class="cover-stage" id="coverStage">
+    <div class="cover-glow" aria-hidden="true"></div>
+    <div class="wrap cover-grid">
       <div class="cover-head">
-        <p class="kicker">Next Core / 下一代智能内核</p>
+        <p class="kicker">Next Core / AI 原生应用创新团队</p>
         <h1>
-          <span>以严谨的数理思维</span>
-          <span>构建智能系统</span>
+          <span>把复杂技术，</span>
+          <span class="quiet-line">做成可交付的产品。</span>
         </h1>
         <p class="cover-lead">
           <b>启核</b>，寓意 Next Core。团队由软件工程方向学生组成，专注大模型 Agent、RAG 检索增强、
           算法建模与软件系统开发，致力于把前沿 AI 技术转化为可验证、可交付的完整项目。
         </p>
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="#products">浏览产品 <span>↓</span></a>
+          <a class="hero-text-link" href="#about">了解团队 <span>↗</span></a>
+        </div>
       </div>
 
-      <figure class="cover-mark">
-        <img src="assets/logo-mark.png" width="464" height="625" alt="启核 Nexcore 标识">
-        <figcaption>破壳 · 发芽 · 内核</figcaption>
-      </figure>
+      <div class="product-art-stage" aria-label="精选产品">
+        <div class="product-deck" id="productDeck"></div>
+        <div class="deck-controls">
+          <button class="deck-button" id="prevProduct" type="button" aria-label="上一个产品">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M16 10H5M9 5l-5 5 5 5"></path></svg>
+          </button>
+          <button class="deck-button" id="nextProduct" type="button" aria-label="下一个产品">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10h11M11 5l5 5-5 5"></path></svg>
+          </button>
+        </div>
+        <div class="product-caption" aria-live="polite" aria-atomic="true">
+          <p class="caption-index" id="showcaseIndex">01 / 06</p>
+          <h2 id="showcaseTitle">启核工作台</h2>
+          <p id="showcaseMeta">NexcoreWork · 本地智能体工作台</p>
+          <a id="showcaseLink" href="https://yan-stone-computer.github.io/nexcorework-site/" target="_blank" rel="noopener">查看产品 <span>↗</span></a>
+        </div>
+        <p class="cover-progress" aria-hidden="true"><span></span></p>
+      </div>
     </div>
-
-    <nav class="cover-index" aria-label="本期目录">
-      <span class="ci-label">本期内容</span>
-      <a href="#about"><b>01</b>关于启核</a>
-      <a href="#directions"><b>02</b>四条技术方向</a>
-      <a href="#products"><b>03</b>产品矩阵</a>
-      <a href="#method"><b>04</b>方法与技术栈</a>
-      <a href="#architecture"><b>05</b>核心架构</a>
-      <a href="#articles"><b>06</b>技术文章</a>
-      <a href="#contact"><b>07</b>联系与协作</a>
-    </nav>
   </div>
 </section>
 
@@ -169,10 +181,10 @@
     </div>
 
     <div class="rail-body">
-      <h2 class="sect-title reveal">六款已经上线在跑的产品</h2>
+      <h2 class="sect-title reveal">五款已经上线在跑的产品</h2>
       <p class="sect-note reveal">
-        从家庭资源、节庆竞技到本地智能体，六个项目都已拥有独立官网与可体验的成品。
-        三款新近发布的产品置顶展示，原有桌面、鸿蒙与安卓作品继续保留。
+        从家庭资源、节庆竞技到本地智能体，五个项目都已拥有独立官网与可体验的成品。
+        三款新近发布的产品置顶展示，原有桌面、游戏与安卓作品继续保留。
       </p>
 
       <ol class="prods" id="prodList">
@@ -488,13 +500,6 @@
             </a>
           </li>
           <li>
-            <a href="https://www.bilibili.com/video/BV1yEfSB8EoG/" target="_blank" rel="noopener">
-              <span class="cl-k">功能演示</span>
-              <span class="cl-v">枢游记</span>
-              <span class="cl-x">↗</span>
-            </a>
-          </li>
-          <li>
             <a href="#articles">
               <span class="cl-k">技术文章</span>
               <span class="cl-v">阅读与投稿</span>
@@ -542,7 +547,6 @@
           <h5>资源</h5>
           <a href="https://github.com/yan-stone-computer" target="_blank" rel="noopener">GitHub</a>
           <a href="https://www.bilibili.com/video/BV18r5Q6TEBM/" target="_blank" rel="noopener">天枢便签演示</a>
-          <a href="https://www.bilibili.com/video/BV1yEfSB8EoG/" target="_blank" rel="noopener">枢游记演示</a>
         </div>
         <div class="colophon-col">
           <h5>本站</h5>
@@ -599,7 +603,7 @@
 <script src="directions-data.js?v=20261028-arch9"></script>
 <script src="products-data.js?v=20261028-arch9"></script>
 <script src="article-config.js?v=20261028-arch9"></script>
-<script src="assets/vendor/paper-shaders.js?v=0.0.82"></script>
-<script src="script.js?v=20261028-paper1"></script>
+<script src="experience.js?v=chromatic-1"></script>
+<script src="script.js?v=chromatic-1"></script>
 </body>
 </html>

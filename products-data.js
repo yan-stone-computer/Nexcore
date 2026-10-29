@@ -95,24 +95,6 @@
         },
         {
             num: '05',
-            name: '枢游记',
-            en: 'ShuYouJi',
-            tag: '鸿蒙原生',
-            lead: '为 HarmonyOS NEXT 原生开发的 AI 旅行助手。',
-            desc: '图像修复、文化知识、行程规划与花费管理集成在同一个应用里。AI 客服采用意图识别加指令模式，用自然语言即可管理整趟旅行；手机与平板双端原生适配。',
-            features: ['AI 图像修复（去雾 / 超分 / 锐化 / 色彩增强）', 'AI 智能客服', '图文旅行日记', '花费管理', '手机 / 平板双端'],
-            meta: [
-                { k: '平台', v: 'HarmonyOS NEXT' },
-                { k: '设备', v: '手机 / 平板' },
-                { k: '技术栈', v: 'ArkTS · ArkUI' }
-            ],
-            iconSvg: '',
-            iconImg: 'assets/shuyouji-icon.png',
-            site: 'https://yan-stone-computer.github.io/ShuYouJi-Web/',
-            repo: ''
-        },
-        {
-            num: '06',
             name: '陈汉升',
             en: 'ChenHanshen',
             tag: '角色对话',

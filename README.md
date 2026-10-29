@@ -54,8 +54,7 @@
 | 02 | 启核图策 NexcoreGraph | 家庭资源智能管家 | https://yan-stone-computer.github.io/NexcoreGraph-Official/ |
 | 03 | 鼓令 Drum Tide | 4v4 节庆彩墨竞技 | https://yan-stone-computer.github.io/guling-drum-tide/ |
 | 04 | 天枢便签 PolarisNote | 桌面（Qt 6 / C++） | https://yan-stone-computer.github.io/polarisnote-web/ |
-| 05 | 枢游记 ShuYouJi | 鸿蒙原生（ArkTS / ArkUI） | https://yan-stone-computer.github.io/ShuYouJi-Web/ |
-| 06 | 陈汉升 ChenHanshen | 安卓（Kotlin） | https://yan-stone-computer.github.io/awesome-chenhansheng-app/ |
+| 05 | 陈汉升 ChenHanshen | 安卓（Kotlin） | https://yan-stone-computer.github.io/awesome-chenhansheng-app/ |
 
 产品清单同样是数据驱动的：修改 `products-data.js` 即可，产品索引、统计数字与
 页脚产品链接会自动同步。产品图标默认取 `iconSvg`；留空则回退到 `iconImg`，
@@ -66,7 +65,8 @@
 ```text
 .
 ├── index.html               # 单页入口（封面 / 关于 / 方向 / 产品 / 方法 / 文章 / 联系）
-├── styles.css               # 设计系统：纸感底色 + 墨色排版 + 单一强调色
+├── styles.css               # 设计系统：明暗主题、Apple 式留白与产品画廊
+├── experience.js            # 首屏产品卡片、滚动形变、轮换与主题切换
 ├── script.js                # 交互：方向渲染、产品渲染、文章系统、版面动效
 ├── directions-data.js       # 技术方向数据（唯一需要维护的方向清单）
 ├── products-data.js         # 产品数据（唯一需要维护的产品清单）
@@ -87,7 +87,6 @@
     ├── nexcoregraph-icon.png # 启核图策产品图标
     ├── guling-icon.webp      # 鼓令产品图标
     ├── nexcorework-icon.svg  # 启核工作台产品图标
-    ├── shuyouji-icon.png    # 枢游记产品图标
     ├── chenhansheng-cover.jpg  # 陈汉升产品图标
     ├── group-qr.jpg         # 交流群二维码（联系区）
     ├── polaris-main.png     # 天枢便签主界面截图
@@ -150,16 +149,16 @@ console.log('HASH='+c.pbkdf2Sync(p,s,310000,32,'sha256').toString('base64'))"
 
 ## 设计说明
 
-版面遵循四条规则：
+版面采用 Apple Design Language 的产品画廊方向：
 
-1. **版面优先** —— 层级靠字号、行距、发丝线与留白建立，不使用阴影与渐变。
-2. **单一强调色** —— 品牌青绿只用于编号、链接与关键节点，其余全部墨色。
-3. **网格硬朗** —— 章节编号 + 英文小标签 + 中文标题，左侧固定信息栏。
-4. **动效克制** —— 只保留淡入位移，并遵循 `prefers-reduced-motion`。
+1. **首屏聚焦** —— 左侧标题，右侧五张产品卡片以弧形叠放，保留充足留白。
+2. **连续形变** —— 滚动进度驱动同一组卡片展开为阶梯错位排列。
+3. **产品轮换** —— 侧边按钮循环整套卡片，并同步名称、类型与产品链接。
+4. **双主题** —— 顶栏按钮平滑切换浅色与深色，选择保存在本地。
+5. **克制动效** —— 只使用 `transform` 与 `opacity`，并遵循 `prefers-reduced-motion`。
 
-响应式断点：`1080 / 940 / 800 / 560 px`。字体优先使用系统字体栈
-（思源宋体 / Songti / SimSun 作衬线，PingFang / 微软雅黑作正文），
-Google Fonts 为可选增强，被阻断时自动降级，不影响版面。
+响应式断点为 `1180 / 980 / 760 / 420 px`，正文与控件使用系统字体栈，
+无需外部字体或前端构建步骤。
 
 ## 部署
 

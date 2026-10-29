@@ -790,22 +790,6 @@
        ═══════════════════════════════════════════════════════════ */
     const navbar = $('navbar');
 
-    // 滚动：报头状态 + 阅读进度
-    const progress = $('scrollProgress');
-    let ticking = false;
-    window.addEventListener('scroll', () => {
-        if (ticking) return;
-        ticking = true;
-        requestAnimationFrame(() => {
-            if (navbar) navbar.classList.toggle('scrolled', window.scrollY > 30);
-            if (progress) {
-                const max = document.documentElement.scrollHeight - window.innerHeight;
-                progress.style.width = (max > 0 ? (window.scrollY / max) * 100 : 0) + '%';
-            }
-            ticking = false;
-        });
-    }, { passive: true });
-
     // 移动端导航
     const navBtn = $('navMobileBtn');
     const navLinks = $('navLinks');
