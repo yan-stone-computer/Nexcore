@@ -607,7 +607,11 @@ svg {
       0
     )
     rotate(calc(var(--r0) * (1 - var(--p)) + var(--r1) * var(--p)))
-    scale(calc(0.91 + var(--p) * 0.09));
+    scale(calc(0.91 + var(--p) * 0.09))
+    translate3d(var(--local-x, 0px), var(--local-y, 0px), 0)
+    rotate(var(--local-r, 0deg))
+    rotateX(var(--tilt-x, 0deg))
+    rotateY(var(--tilt-y, 0deg));
   transform-origin: 50% 100%;
   will-change: transform;
 }
@@ -633,6 +637,10 @@ svg {
 
 .product-card.is-flipped {
   z-index: 35;
+}
+
+.product-card.is-dragging {
+  z-index: 60;
 }
 
 .product-card.is-flipped .product-card__flip {
@@ -701,6 +709,14 @@ svg {
 .product-card__front {
   animation: card-enter 850ms var(--ease-out) both;
   animation-delay: calc(140ms + var(--i) * 65ms);
+}
+
+.product-card.is-dragging .product-card__front,
+.product-card.is-hovered:not(.is-flipped) .product-card__front {
+  box-shadow:
+    0 0 0 1px var(--card-ring),
+    0 46px 104px var(--card-shadow),
+    0 10px 28px var(--card-shadow-soft);
 }
 
 .product-card__front::after {

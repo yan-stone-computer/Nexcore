@@ -87,6 +87,7 @@
     let cycling = false;
     let suppressClick = false;
     let dragging = false;
+    let draggingCard = null;
     let dragStartX = 0;
     let dragStartY = 0;
     let dragX = 0;
@@ -123,6 +124,13 @@
       stage.classList.remove("is-dragging");
       stage.style.setProperty("--drag-x", "0px");
       stage.style.setProperty("--drag-r", "0deg");
+      if (draggingCard) {
+        draggingCard.classList.remove("is-dragging");
+        draggingCard.style.setProperty("--local-x", "0px");
+        draggingCard.style.setProperty("--local-y", "0px");
+        draggingCard.style.setProperty("--local-r", "0deg");
+      }
+      draggingCard = null;
     }
 
     deck.addEventListener("click", (event) => {
@@ -140,6 +148,7 @@
       const card = event.target.closest(".product-card");
       if (!card) return;
       dragging = true;
+      draggingCard = card;
       hoveredCard = card;
       dragStartX = event.clientX;
       dragStartY = event.clientY;
@@ -150,9 +159,14 @@
       if (!dragging) return;
       dragX = event.clientX - dragStartX;
       const dragY = event.clientY - dragStartY;
-      if (Math.abs(dragX) <= 5 || Math.abs(dragX) < Math.abs(dragY)) return;
+      if (Math.abs(dragX) <= 3 || Math.abs(dragX) < Math.abs(dragY)) return;
+      event.preventDefault();
       stage.classList.add("is-dragging");
-      stage.style.setProperty("--drag-x", `${Math.max(-170, Math.min(170, dragX))}px`);
+      draggingCard.classList.add("is-dragging");
+      draggingCard.style.setProperty("--local-x", `${Math.max(-180, Math.min(180, dragX))}px`);
+      draggingCard.style.setProperty("--local-y", `${Math.max(-36, Math.min(36, dragY * 0.22))}px`);
+      draggingCard.style.setProperty("--local-r", `${Math.max(-5, Math.min(5, dragX * 0.022))}deg`);
+      stage.style.setProperty("--drag-x", `${Math.max(-36, Math.min(36, dragX * 0.18))}px`);
       stage.style.setProperty("--drag-r", `${Math.max(-6, Math.min(6, dragX * 0.028))}deg`);
     });
 
@@ -160,13 +174,14 @@
       if (!dragging) return;
       const moved = Math.abs(dragX) > 8;
       const shouldCycle = Math.abs(dragX) > 56;
+      const dragDirection = dragX < 0 ? 1 : -1;
       dragging = false;
       resetDrag();
       if (moved) {
         suppressClick = true;
         setTimeout(() => { suppressClick = false; }, 0);
       }
-      if (shouldCycle) requestCycle(dragX < 0 ? 1 : -1);
+      if (shouldCycle) requestCycle(dragDirection);
       hoveredCard = null;
     }
 
@@ -177,12 +192,33 @@
       const card = event.target.closest(".product-card");
       if (!card || card === hoveredCard) return;
       hoveredCard = card;
-      deck.querySelectorAll(".product-card").forEach((item) => item.classList.toggle("is-hovered", item === card));
+      deck.querySelectorAll(".product-card").forEach((item) => {
+        item.classList.toggle("is-hovered", item === card);
+        if (item !== card) {
+          item.style.setProperty("--tilt-x", "0deg");
+          item.style.setProperty("--tilt-y", "0deg");
+        }
+      });
+    });
+
+    deck.addEventListener("pointermove", (event) => {
+      if (dragging || event.pointerType !== "mouse") return;
+      const card = event.target.closest(".product-card");
+      if (!card) return;
+      const rect = card.getBoundingClientRect();
+      const x = (event.clientX - rect.left) / rect.width - 0.5;
+      const y = (event.clientY - rect.top) / rect.height - 0.5;
+      card.style.setProperty("--tilt-x", `${(y * -7).toFixed(2)}deg`);
+      card.style.setProperty("--tilt-y", `${(x * 9).toFixed(2)}deg`);
     });
 
     deck.addEventListener("pointerleave", () => {
       hoveredCard = null;
-      deck.querySelectorAll(".product-card").forEach((card) => card.classList.remove("is-hovered"));
+      deck.querySelectorAll(".product-card").forEach((card) => {
+        card.classList.remove("is-hovered");
+        card.style.setProperty("--tilt-x", "0deg");
+        card.style.setProperty("--tilt-y", "0deg");
+      });
     });
 
     document.getElementById("prevProduct").addEventListener("click", () => requestCycle(-1));
