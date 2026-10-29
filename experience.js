@@ -37,6 +37,7 @@
         <span class="product-card__surface product-card__front">
           <span class="product-card__shape product-card__shape-a"></span>
           <span class="product-card__shape product-card__shape-b"></span>
+          <span class="product-card__spotlight"></span>
           <span class="product-card__visual is-${color.type}">${visual}</span>
           <span class="product-card__index">${product.num}</span>
           <span class="product-card__badge">${product.repo ? "开源" : "产品"}</span>
@@ -210,6 +211,8 @@
       const y = (event.clientY - rect.top) / rect.height - 0.5;
       card.style.setProperty("--tilt-x", `${(y * -7).toFixed(2)}deg`);
       card.style.setProperty("--tilt-y", `${(x * 9).toFixed(2)}deg`);
+      card.style.setProperty("--spot-x", `${(x * 100 + 50).toFixed(1)}%`);
+      card.style.setProperty("--spot-y", `${(y * 100 + 50).toFixed(1)}%`);
     });
 
     deck.addEventListener("pointerleave", () => {
@@ -232,9 +235,7 @@
     themeButton.setAttribute("aria-label", dark ? "切换到浅色模式" : "切换到深色模式");
   }
 
-  syncTheme();
-  themeButton.addEventListener("click", () => {
-    const next = root.dataset.theme === "dark" ? "light" : "dark";
+  function applyTheme(next) {
     root.dataset.theme = next;
     root.style.colorScheme = next;
     themeMeta.content = next === "dark" ? "#101012" : "#f5f5f7";
@@ -242,7 +243,119 @@
       localStorage.setItem("nexcore-theme", next);
     } catch {}
     syncTheme();
+  }
+
+  syncTheme();
+  themeButton.addEventListener("click", () => {
+    const next = root.dataset.theme === "dark" ? "light" : "dark";
+    if (reduceMotion || !document.startViewTransition) {
+      applyTheme(next);
+      return;
+    }
+    const rect = themeButton.getBoundingClientRect();
+    const x = rect.left + rect.width / 2;
+    const y = rect.top + rect.height / 2;
+    root.style.setProperty("--theme-x", `${x}px`);
+    root.style.setProperty("--theme-y", `${y}px`);
+    root.style.setProperty("--theme-radius", `${Math.hypot(Math.max(x, innerWidth - x), Math.max(y, innerHeight - y))}px`);
+    document.startViewTransition(() => applyTheme(next));
   });
+
+  function mountProductPreview() {
+    if (reduceMotion || !matchMedia("(hover: hover) and (pointer: fine)").matches) return;
+    const media = {
+      NexcoreWork: { src: "assets/nexcorework-icon.svg", kind: "icon" },
+      NexcoreGraph: { src: "assets/nexcoregraph-icon.png", kind: "icon" },
+      "Drum Tide": { src: "assets/guling-icon.webp", kind: "icon" },
+      PolarisNote: { src: "assets/polaris-dashboard.png", kind: "image" },
+      ChenHanshen: { src: "assets/chenhansheng-cover.jpg", kind: "image" }
+    };
+    const peek = document.createElement("div");
+    peek.className = "product-peek";
+    peek.setAttribute("aria-hidden", "true");
+    peek.innerHTML = '<span class="product-peek__media"><img width="238" height="136" alt="" decoding="async"></span><span class="product-peek__copy"><b></b><small></small></span>';
+    document.body.append(peek);
+    const image = peek.querySelector("img");
+    const title = peek.querySelector("b");
+    const tag = peek.querySelector("small");
+    let currentRow = null;
+    let pointerX = 0;
+    let pointerY = 0;
+    let frameId = 0;
+
+    function positionPreview() {
+      frameId = 0;
+      const width = 238;
+      const height = 180;
+      const x = pointerX + width + 30 > innerWidth ? pointerX - width - 22 : pointerX + 22;
+      const y = Math.min(innerHeight - height - 16, Math.max(16, pointerY + 18));
+      peek.style.transform = `translate3d(${Math.max(16, x)}px, ${y}px, 0)`;
+    }
+
+    function hidePreview() {
+      currentRow = null;
+      peek.classList.remove("is-visible");
+    }
+
+    document.addEventListener("pointerover", (event) => {
+      const row = event.target.closest?.(".prod");
+      if (!row || row === currentRow) return;
+      const rows = [...document.querySelectorAll(".prod")];
+      const product = products[rows.indexOf(row)];
+      const item = product && media[product.en];
+      if (!product || !item) return;
+      currentRow = row;
+      image.src = item.src;
+      title.textContent = product.name;
+      tag.textContent = product.tag;
+      peek.classList.toggle("is-icon", item.kind === "icon");
+      peek.classList.add("is-visible");
+    });
+
+    document.addEventListener("pointermove", (event) => {
+      pointerX = event.clientX;
+      pointerY = event.clientY;
+      if (!currentRow) return;
+      if (!event.target.closest?.(".prod")) {
+        hidePreview();
+        return;
+      }
+      if (!frameId) frameId = requestAnimationFrame(positionPreview);
+    });
+
+    document.documentElement.addEventListener("pointerleave", hidePreview);
+    window.addEventListener("wheel", hidePreview, { passive: true });
+  }
+
+  mountProductPreview();
+
+  const contactGroup = document.querySelector(".contact-group");
+  if (contactGroup) {
+    contactGroup.addEventListener("click", async () => {
+      const value = contactGroup.dataset.copy;
+      const label = contactGroup.querySelector("small");
+      if (!value || !label) return;
+      const original = label.textContent;
+      try {
+        await navigator.clipboard.writeText(value);
+      } catch {
+        const field = document.createElement("textarea");
+        field.value = value;
+        field.style.position = "fixed";
+        field.style.opacity = "0";
+        document.body.append(field);
+        field.select();
+        document.execCommand("copy");
+        field.remove();
+      }
+      contactGroup.classList.add("is-copied");
+      label.textContent = "群号已复制";
+      setTimeout(() => {
+        contactGroup.classList.remove("is-copied");
+        label.textContent = original;
+      }, 1600);
+    });
+  }
 
   if (!reduceMotion && cover && stage) {
     let visible = false;

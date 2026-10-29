@@ -35,7 +35,7 @@
 
 | 编号 | 产品 | 形态 | 官网 |
 |---|---|---|---|
-| 01 | 启核工作台 NexcoreWork | 本地智能体工作台 | https://yan-stone-computer.github.io/nexcorework-site/?v=20261027-2 |
+| 01 | 启核工作台 NexcoreWork | 本地智能体工作台 | https://yan-stone-computer.github.io/nexcorework-site/ |
 | 02 | 启核图策 NexcoreGraph | 家庭资源智能管家 | https://yan-stone-computer.github.io/NexcoreGraph-Official/ |
 | 03 | 鼓令 Drum Tide | 4v4 节庆彩墨竞技 | https://yan-stone-computer.github.io/guling-drum-tide/ |
 | 04 | 天枢便签 PolarisNote | 桌面（Qt 6 / C++） | https://yan-stone-computer.github.io/polarisnote-web/ |
@@ -137,9 +137,10 @@ console.log('HASH='+c.pbkdf2Sync(p,s,310000,32,'sha256').toString('base64'))"
 
 1. **首屏聚焦** —— 左侧标题，右侧五张产品卡片以弧形叠放，保留充足留白。
 2. **连续形变** —— 滚动进度驱动同一组卡片展开为阶梯错位排列。
-3. **产品轮换** —— 侧边按钮循环整套卡片，并同步名称、类型与产品链接。
-4. **双主题** —— 顶栏按钮平滑切换浅色与深色，选择保存在本地。
-5. **克制动效** —— 只使用 `transform` 与 `opacity`，并遵循 `prefers-reduced-motion`。
+3. **卡片交互** —— 可以拖动、翻转、悬停倾斜，也可用侧边按钮和键盘轮换。
+4. **文章书架** —— 标题写在可抽取的书脊上，取书后显示完整标题、简介与阅读入口。
+5. **双主题** —— 顶栏按钮以圆形转场切换明暗主题，选择保存在本地。
+6. **克制动效** —— 位移和透明度优先，并完整遵循 `prefers-reduced-motion`。
 
 响应式断点为 `1180 / 980 / 760 / 420 px`，正文与控件使用系统字体栈，
 无需外部字体或前端构建步骤。

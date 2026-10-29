@@ -1,5 +1,5 @@
 /**
- * 启核 Nexcore 官网 — 交互脚本
+ * 启核 Nexcore 官网 - 交互脚本
  *
  * 结构
  *   1. 技术方向渲染（directions-data.js 驱动）
@@ -141,7 +141,7 @@
                             ${p.iconSvg
                                 ? `<span class="prod-mark">${p.iconSvg}</span>`
                                 : (p.iconImg
-                                    ? `<span class="prod-mark"><img src="${esc(p.iconImg)}" alt="" loading="lazy" decoding="async"></span>`
+                                    ? `<span class="prod-mark"><img src="${esc(p.iconImg)}" width="42" height="42" alt="" loading="lazy" decoding="async"></span>`
                                     : '')}
                             <h3 class="prod-name">${esc(p.name)}<span class="prod-en">${esc(p.en)}</span></h3>
                             <span class="prod-tag">${esc(p.tag || '')}</span>
@@ -196,6 +196,14 @@
     const STORAGE_KEY = 'nexcore_articles_v1';
     const PER_PAGE = 5;
     const AUTHOR_FALLBACK = '启核 Nexcore';
+    const BOOK_PALETTE = [
+        { bg: '#0b5d45', ink: '#f4fffa', edge: '#7fcbb1' },
+        { bg: '#234b6b', ink: '#f2f8ff', edge: '#8db9de' },
+        { bg: '#80442b', ink: '#fff8f1', edge: '#d8a184' },
+        { bg: '#6f3448', ink: '#fff6f9', edge: '#d59aaf' },
+        { bg: '#413a67', ink: '#f8f6ff', edge: '#a9a0df' },
+        { bg: '#354438', ink: '#f5fff7', edge: '#95b49a' }
+    ];
 
     let staticArticles = [];
     let staticArticlePromise = null;
@@ -394,25 +402,21 @@
             return;
         }
 
-        articleList.innerHTML = pageItems.map(a => `
-            <article class="article" data-id="${esc(a.id)}">
-                <div class="art-side-l">
-                    <span class="art-date">${esc(formatDate(a.date))}${a.updatedAt ? ' · 改' : ''}</span>
-                    <span class="art-cat">${esc(a.category || '其他')}</span>
-                </div>
-                <div class="art-main">
-                    <h3 class="art-title">${esc(a.title)}</h3>
-                    <p class="art-by">${esc(a.author)}</p>
-                    <p class="art-excerpt">${esc(makeExcerpt(a.content))}</p>
-                    <div class="art-ops">
-                        <button type="button" class="tbtn" data-act="read">阅读全文</button>
-                        ${a.static ? '' : `
-                            <button type="button" class="tbtn is-muted" data-act="edit">编辑</button>
-                            <button type="button" class="tbtn is-danger" data-act="del">删除</button>`}
-                    </div>
-                </div>
-            </article>
-        `).join('');
+        articleList.innerHTML = pageItems.map((a, index) => {
+            const book = BOOK_PALETTE[(a.category ? a.category.charCodeAt(0) + index : index) % BOOK_PALETTE.length];
+            const date = formatDate(a.date);
+            const spineTitle = Array.from(a.title || '未命名文章');
+            const shortTitle = spineTitle.length > 18 ? spineTitle.slice(0, 18).join('') + '…' : spineTitle.join('');
+            return `
+                <article class="article book-slot" data-id="${esc(a.id)}" style="--book-bg:${book.bg};--book-ink:${book.ink};--book-edge:${book.edge};--book-h:${[88, 74, 94, 80, 86][index % 5]}%;--book-i:${index}">
+                    <button class="book-spine" type="button" data-act="select" aria-label="选择文章：${esc(a.title)}" title="${esc(a.title)}">
+                        <span class="book-spine-category">${esc(a.category || '其他')}</span>
+                        <span class="book-spine-title">${esc(shortTitle)}</span>
+                        <span class="book-spine-year">${esc(date.slice(0, 4))}</span>
+                    </button>
+                    <span class="book-bookmark" aria-hidden="true"></span>
+                </article>`;
+        }).join('');
 
         renderPager(totalPages);
     }
@@ -448,7 +452,8 @@
             if (!card) return;
             const id = card.dataset.id;
             const act = btn.dataset.act;
-            if (act === 'read') openArticle(id);
+            if (act === 'select') openBookPreview(id, btn);
+            else if (act === 'read') openArticle(id);
             else if (act === 'edit') startEdit(id);
             else if (act === 'del') openDelete(id);
         });
@@ -538,6 +543,62 @@
     const amCat = $('amCat');
     const amDate = $('amDate');
     const amBody = $('amBody');
+    const bookOverlay = $('bookOverlay');
+    const bookCoverObject = $('bookCoverObject');
+    const bookPreviewCategory = $('bookPreviewCategory');
+    const bookPreviewTitle = $('bookPreviewTitle');
+    const bookPreviewCoverExcerpt = $('bookPreviewCoverExcerpt');
+    const bookPreviewAuthor = $('bookPreviewAuthor');
+    const bookPreviewYear = $('bookPreviewYear');
+    const bookPreviewHeading = $('bookPreviewHeading');
+    const bookPreviewExcerpt = $('bookPreviewExcerpt');
+    const bookOwnerActions = $('bookOwnerActions');
+    const bookRead = $('bookRead');
+    let previewBookId = null;
+    let previewBookTrigger = null;
+
+    function openBookPreview(id, trigger) {
+        const article = getAllArticles().find(item => item.id === id);
+        if (!bookOverlay || !article) return;
+        previewBookId = id;
+        previewBookTrigger = trigger || null;
+        const book = trigger?.closest('.article');
+        const style = book ? getComputedStyle(book) : null;
+        bookCoverObject.style.setProperty('--book-bg', style?.getPropertyValue('--book-bg').trim() || 'var(--accent)');
+        bookCoverObject.style.setProperty('--book-ink', style?.getPropertyValue('--book-ink').trim() || 'var(--bg)');
+        bookCoverObject.style.setProperty('--book-edge', style?.getPropertyValue('--book-edge').trim() || 'var(--line)');
+        bookPreviewCategory.textContent = article.category || '其他';
+        bookPreviewTitle.textContent = article.title;
+        bookPreviewCoverExcerpt.textContent = makeExcerpt(article.content, 160);
+        bookPreviewAuthor.textContent = article.author || AUTHOR_FALLBACK;
+        bookPreviewYear.textContent = formatDate(article.date).slice(0, 4);
+        bookPreviewHeading.textContent = '内容简介';
+        bookPreviewExcerpt.textContent = makeExcerpt(article.content, 220);
+        bookOwnerActions.hidden = Boolean(article.static);
+        book?.classList.add('is-pulled');
+        bookOverlay.hidden = false;
+        document.body.style.overflow = 'hidden';
+        requestAnimationFrame(() => requestAnimationFrame(() => bookOverlay.classList.add('is-open')));
+        setTimeout(() => {
+            if (!bookOverlay.hidden) bookRead?.focus();
+        }, 260);
+    }
+
+    function closeBookPreview(restoreFocus) {
+        if (!bookOverlay || bookOverlay.hidden) return;
+        bookOverlay.classList.remove('is-open');
+        const trigger = previewBookTrigger;
+        setTimeout(() => {
+            bookOverlay.hidden = true;
+            if ((!articleModal || articleModal.hidden) && (!codeModal || codeModal.hidden)) {
+                document.body.style.overflow = '';
+            }
+            trigger?.closest('.article')?.classList.remove('is-pulled');
+            if (restoreFocus !== false) trigger?.focus();
+        }, 220);
+        previewBookId = null;
+        previewBookTrigger = null;
+    }
 
     function openArticle(id) {
         const a = getAllArticles().find(x => x.id === id);
@@ -559,6 +620,36 @@
         articleModal.hidden = true;
         document.body.style.overflow = '';
         if (amBody) amBody.innerHTML = '';
+    }
+
+    if (bookOverlay) {
+        bookOverlay.addEventListener('click', (event) => {
+            if (event.target.closest('[data-book-close]')) closeBookPreview();
+        });
+    }
+
+    if (bookRead) {
+        bookRead.addEventListener('click', () => {
+            const id = previewBookId;
+            closeBookPreview(false);
+            if (id) setTimeout(() => openArticle(id), 190);
+        });
+    }
+
+    if ($('bookEdit')) {
+        $('bookEdit').addEventListener('click', () => {
+            const id = previewBookId;
+            closeBookPreview(false);
+            if (id) setTimeout(() => startEdit(id), 190);
+        });
+    }
+
+    if ($('bookDelete')) {
+        $('bookDelete').addEventListener('click', () => {
+            const id = previewBookId;
+            closeBookPreview(false);
+            if (id) setTimeout(() => openDelete(id), 190);
+        });
     }
 
     if (articleModal) {
@@ -777,10 +868,11 @@
         });
     }
 
-    if (articleModal || codeModal) {
+    if (articleModal || codeModal || bookOverlay) {
         document.addEventListener('keydown', (e) => {
             if (e.key !== 'Escape') return;
-            if (codeModal && !codeModal.hidden) closeDelete();
+            if (bookOverlay && !bookOverlay.hidden) closeBookPreview();
+            else if (codeModal && !codeModal.hidden) closeDelete();
             else if (articleModal && !articleModal.hidden) closeArticle();
         });
     }

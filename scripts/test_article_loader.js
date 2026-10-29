@@ -125,7 +125,7 @@ function runCase(c) {
                 ...c,
                 manifestHits,
                 mdHits,
-                rendered: (html.match(/class="art-title"/g) || []).length,
+                rendered: (html.match(/class="article book-slot"/g) || []).length,
                 countText: elements.articleCount ? elements.articleCount.textContent : '',
                 hasEmptyState: /art-empty/.test(html)
             });

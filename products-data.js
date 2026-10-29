@@ -27,16 +27,16 @@
             en: 'NexcoreWork',
             tag: '本地智能体工作台',
             lead: '把模型、工具、文件、记忆与视觉证据收进同一条可核验执行链。',
-            desc: '本地优先的开源智能体工作台。任务在用户选择的工作区中执行，免费模型 Auto、工具、上下文、项目记忆、SQLite 与视觉证据链协同工作；文件变化、命令回执和交付检查进入可追溯记录，Android 可通过加密局域网连接电脑工作区。',
-            features: ['执行闭环与交付门禁', '项目记忆与本地 SQLite', '免费模型 Auto', '独立视觉证据链', 'Android 局域网控制'],
+            desc: '本地优先的开源智能体工作台。v2.1 带来 FTS5 候选检索、图谱扩展、混合评分、MMR 与召回回执组成的可审计长期记忆，并用 NexcoreFileRead 统一解析工作区文档；文件变化、命令回执和交付检查都进入可追溯记录。',
+            features: ['可审计长期记忆', 'NexcoreFileRead 文档解析', '执行闭环与交付门禁', '免费模型 Auto', 'Android 局域网控制'],
             meta: [
                 { k: '平台', v: 'Windows 10 / 11 · Android' },
-                { k: '版本', v: 'v2.0.0' },
+                { k: '版本', v: 'Windows v2.1.0 · Android v2.0.0' },
                 { k: '边界', v: '本地优先 · 可核验执行' }
             ],
             iconSvg: '',
             iconImg: 'assets/nexcorework-icon.svg',
-            site: 'https://yan-stone-computer.github.io/nexcorework-site/?v=20261027-2',
+            site: 'https://yan-stone-computer.github.io/nexcorework-site/',
             repo: 'https://github.com/yan-stone-computer/nexcorework-site'
         },
         {
@@ -48,7 +48,8 @@
             desc: '面向家庭场景的本地优先资源管理产品。通过拍照识别完成入库，再用 GraphRAG 把物品、位置、期限、菜谱与采购关系连成个人资源图谱；写操作先预览、再确认，并支持 HarmonyOS、Web 与微信小程序协同。',
             features: ['拍照识别入库', '可信 AI 问答', 'GraphRAG 资源图谱', '多端协同', '写操作确认与撤销'],
             meta: [
-                { k: '平台', v: 'HarmonyOS / Web / 小程序' },
+                { k: '平台', v: 'HarmonyOS 验证版 / Windows / Web / 小程序' },
+                { k: '版本', v: 'v1.0.0' },
                 { k: '技术栈', v: 'ArkTS · GraphRAG' },
                 { k: '原则', v: '本地优先 · 先确认后写入' }
             ],
@@ -85,6 +86,7 @@
             features: ['21+ 核心功能', '看板式任务管理', 'AI 生成与续写', '文档智能分析', '本地 SQLite 存储'],
             meta: [
                 { k: '平台', v: 'Windows / Linux' },
+                { k: '版本', v: 'v3.0.0' },
                 { k: '技术栈', v: 'Qt 6 · C++ · SQLite' },
                 { k: '开源', v: 'GitHub · MIT' }
             ],
@@ -99,8 +101,8 @@
             en: 'ChenHanshen',
             tag: '角色对话',
             lead: '把《我真没想重生啊》里的陈汉升装进手机。',
-            desc: '原生安卓 AI 角色扮演应用。角色话术与性格设定基于原著构建，支持人格对话、发图识图、AI 生图与剧情知识库检索；密钥与聊天记录只存本机。',
-            features: ['人格对话', '发图识图', 'AI 生图', '1000+ 章剧情知识库', '会话记忆'],
+            desc: '原生安卓 AI 角色扮演应用。角色话术与性格设定基于原著构建，支持人格对话、多引擎发图识图与本地离线 OCR 兜底，也能继续生成图片、检索剧情知识；密钥与聊天记录只存本机。',
+            features: ['人格对话', '多引擎识图与本地 OCR', 'AI 生图', '1000+ 章剧情知识库', '会话记忆'],
             meta: [
                 { k: '平台', v: 'Android 8.0+' },
                 { k: '版本', v: 'v4.1.0 · 9 MB' },
