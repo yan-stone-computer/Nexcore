@@ -195,14 +195,14 @@
        ═══════════════════════════════════════════════════════════ */
     const AUTHOR_FALLBACK = '启核 Nexcore';
     const ARTICLE_DIAGRAMS = {
-        'llm-app-dev-guide': { src: 'assets/architecture/agent-loop.svg', label: '从意图识别、检索增强到工具执行的应用架构' },
-        'skill-authoring-guide': { src: 'assets/architecture/agent-loop.svg', label: '技能从输入、工具调用到结果验证的执行闭环' },
-        'slow-hash-guide': { src: 'assets/architecture/security.svg', label: '凭据校验、加密存储与权限边界' },
+        'llm-app-dev-guide': { src: 'assets/architecture/ai-app-architecture.svg', label: '分流、检索、上下文组装与模型生成的应用架构' },
+        'skill-authoring-guide': { src: 'assets/architecture/skill-package-architecture.svg', label: 'SKILL.md、references 与 scripts 的渐进式加载结构' },
+        'slow-hash-guide': { src: 'assets/architecture/password-hashing.svg', label: '随机盐、慢哈希派生与恒时校验流程' },
         'deepseek-builtin-vision': { src: 'assets/architecture/vision.svg', label: '视觉证据链：解析、融合与可读输出' },
-        'completion-evidence': { src: 'assets/architecture/agent-loop.svg', label: '执行、观察、证据写回与交付门禁' },
+        'completion-evidence': { src: 'assets/architecture/completion-evidence.svg', label: '工具回执、文件差异、渲染结果与交付门禁' },
         'context-budget-for-long-tasks': { src: 'assets/architecture/context.svg', label: '固定规则、项目注入、历史与输入四区预算' },
-        'free-model-auto-routing': { src: 'assets/architecture/agent-loop.svg', label: '任务特征、模型路由、执行与结果回写' },
-        'screenshot-layout-debug': { src: 'assets/architecture/vision.svg', label: '截图从视觉解析到布局证据的处理链' },
+        'free-model-auto-routing': { src: 'assets/architecture/model-routing.svg', label: '任务识别、硬过滤、候选评分与安全回退' },
+        'screenshot-layout-debug': { src: 'assets/architecture/screenshot-debug.svg', label: '截图复现、DOM 测量、共同根因与渲染验收' },
         'workspace-and-memory': { src: 'assets/architecture/memory.svg', label: '工作区、项目记忆与跨轮次召回' },
         'agent-execution-loop': { src: 'assets/architecture/agent-loop.svg', label: 'Agent 规划、执行、观察与交付闭环' },
         'local-storage-architecture': { src: 'assets/architecture/storage.svg', label: '应用数据库、工作区与本地文件边界' },

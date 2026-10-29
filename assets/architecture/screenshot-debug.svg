@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="540" viewBox="0 0 960 540" role="img" aria-labelledby="title desc">
+  <title id="title">截图布局问题的全局排查流程</title>
+  <desc id="desc">从用户截图先复现问题，读取图片原始尺寸、渲染尺寸和计算样式，定位 HTML height 属性与 CSS 宽度共同造成的比例冲突，再用全局 height auto、aspect-ratio 和真实渲染截图验证修复。</desc>
+  <defs>
+    <marker id="arrow-debug" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0 0 10 5 0 10Z" fill="#0b8797"/>
+    </marker>
+  </defs>
+  <rect width="960" height="540" rx="28" fill="#f7fbfc"/>
+  <g font-family="Microsoft YaHei, PingFang SC, sans-serif">
+    <text x="42" y="56" font-size="13" font-weight="700" fill="#0d7387" letter-spacing="1.2">SCREENSHOT LAYOUT DEBUG</text>
+
+    <g>
+      <rect x="38" y="182" width="140" height="142" rx="17" fill="#ffffff" stroke="#bcdce4"/>
+      <text x="108" y="221" text-anchor="middle" font-size="17" font-weight="700" fill="#18323b">用户截图</text>
+      <text x="108" y="248" text-anchor="middle" font-size="11" fill="#58737d">只描述表面症状</text>
+      <rect x="58" y="270" width="100" height="30" rx="5" fill="#dceef2"/>
+      <line x1="76" y1="280" x2="138" y2="280" stroke="#7197a2"/>
+      <line x1="76" y1="288" x2="120" y2="288" stroke="#7197a2"/>
+    </g>
+    <g>
+      <rect x="210" y="182" width="162" height="142" rx="17" fill="#e8faf5" stroke="#54d0b1" stroke-width="2"/>
+      <text x="291" y="221" text-anchor="middle" font-size="17" font-weight="700" fill="#18323b">先复现</text>
+      <text x="291" y="248" text-anchor="middle" font-size="11" fill="#58737d">多个真实宽度</text>
+      <text x="291" y="270" text-anchor="middle" font-size="11" fill="#58737d">读取 DOM 尺寸</text>
+      <text x="291" y="292" text-anchor="middle" font-size="11" fill="#58737d">对比计算样式</text>
+    </g>
+    <g>
+      <rect x="404" y="172" width="190" height="162" rx="18" fill="#ffffff" stroke="#bcdce4"/>
+      <text x="499" y="207" text-anchor="middle" font-size="17" font-weight="700" fill="#18323b">找出共同根因</text>
+      <text x="430" y="237" font-size="11" fill="#58737d">原图比例：1600 × 1000</text>
+      <text x="430" y="259" font-size="11" fill="#58737d">CSS：width 100%</text>
+      <text x="430" y="281" font-size="11" fill="#58737d">HTML：height 属性残留</text>
+      <text x="430" y="307" font-size="11" font-weight="700" fill="#a84b3b">对象被拉伸或裁切</text>
+    </g>
+    <g>
+      <rect x="626" y="172" width="188" height="162" rx="18" fill="#e8faf5" stroke="#54d0b1" stroke-width="2"/>
+      <text x="720" y="207" text-anchor="middle" font-size="17" font-weight="700" fill="#18323b">全局修复</text>
+      <text x="652" y="237" font-size="11" fill="#58737d">img { height: auto }</text>
+      <text x="652" y="259" font-size="11" fill="#58737d">布局预留 aspect-ratio</text>
+      <text x="652" y="281" font-size="11" fill="#58737d">容器使用容器自身比例</text>
+      <text x="652" y="307" font-size="11" fill="#58737d">同类图片一并修正</text>
+    </g>
+    <g>
+      <rect x="846" y="196" width="72" height="114" rx="15" fill="#10272f"/>
+      <text x="882" y="233" text-anchor="middle" font-size="16" font-weight="700" fill="#f4fbfc">渲染</text>
+      <text x="882" y="257" text-anchor="middle" font-size="16" font-weight="700" fill="#f4fbfc">验收</text>
+      <text x="882" y="286" text-anchor="middle" font-size="10" fill="#bad3d9">截图复核</text>
+    </g>
+    <g fill="none" stroke="#0b8797" stroke-width="2.3" marker-end="url(#arrow-debug)">
+      <path d="M178 253h32"/>
+      <path d="M372 253h32"/>
+      <path d="M594 253h32"/>
+      <path d="M814 253h32"/>
+    </g>
+
+    <g>
+      <rect x="272" y="397" width="416" height="68" rx="14" fill="#ffffff" stroke="#bcdce4"/>
+      <text x="480" y="425" text-anchor="middle" font-size="14" font-weight="700" fill="#18323b">验收标准</text>
+      <text x="480" y="447" text-anchor="middle" font-size="11" fill="#58737d">桌面、平板、手机宽度下图片完整显示且导航可点击</text>
+    </g>
+    <path d="M720 334v42h-88v21" fill="none" stroke="#18b795" stroke-width="2" stroke-dasharray="6 6" marker-end="url(#arrow-debug)"/>
+    <text x="480" y="514" text-anchor="middle" font-size="13" fill="#466873">先量真实 DOM，再改共同样式，避免只修截图里的那一张</text>
+  </g>
+</svg>
